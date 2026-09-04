@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#080b12">
+<title>NovaStore — Digital Marketplace</title>
+<style>
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#070a10;color:#f5f7fb;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(circle at 80% 0,rgba(124,92,255,.14),transparent 28%),radial-gradient(circle at 10% 35%,rgba(32,214,199,.06),transparent 25%);z-index:-1}
+button,input{font:inherit}button{cursor:pointer}a{text-decoration:none;color:inherit}
+.nav{height:72px;position:sticky;top:0;z-index:50;display:flex;align-items:center;padding:0 5%;gap:24px;background:rgba(7,10,16,.78);backdrop-filter:blur(18px);border-bottom:1px solid #182131}
+.logo{font-weight:950;letter-spacing:1.5px;margin-right:auto}.logo i{font-style:normal;color:#20d6c7}.navlinks{display:flex;gap:20px;color:#9ba8bb;font-size:14px}.navlinks a:hover{color:#fff}.admin-btn{padding:10px 14px;border:1px solid #263249;border-radius:11px;color:#dce4f3;background:#0d131e}
+.hero{max-width:1180px;margin:auto;min-height:610px;padding:80px 5%;display:grid;grid-template-columns:1.2fr .8fr;align-items:center;gap:50px}
+.eyebrow{font-size:11px;font-weight:900;letter-spacing:2.5px;color:#20d6c7}.hero h1{font-size:clamp(45px,7vw,82px);line-height:.98;letter-spacing:-3px;margin:17px 0}.grad{background:linear-gradient(90deg,#8b6cff,#20d6c7);-webkit-background-clip:text;color:transparent}.hero p{color:#93a0b4;font-size:17px;line-height:1.7;max-width:570px}.actions{display:flex;gap:12px;margin-top:28px;flex-wrap:wrap}.btn{border:0;padding:14px 19px;border-radius:12px;color:white;font-weight:850;background:linear-gradient(100deg,#7658f6,#9b70ff);box-shadow:0 12px 30px rgba(118,88,246,.18);transition:.22s}.btn:hover{transform:translateY(-2px);filter:brightness(1.08)}.btn.alt{background:#0e1521;border:1px solid #253147;box-shadow:none}.visual{position:relative;height:370px}.ring{position:absolute;inset:20px;border-radius:50%;border:1px solid #29344a;box-shadow:0 0 100px rgba(124,92,255,.18),inset 0 0 70px rgba(32,214,199,.06);animation:spin 18s linear infinite}.ring:before,.ring:after{content:"";position:absolute;border-radius:50%;border:1px solid #28334a}.ring:before{inset:35px}.ring:after{inset:75px}.core{position:absolute;width:150px;height:150px;left:50%;top:50%;transform:translate(-50%,-50%);border-radius:35%;background:linear-gradient(135deg,#8466ff,#19cbbd);box-shadow:0 0 80px #7658f655;display:grid;place-items:center;font-size:52px;animation:float 4s ease-in-out infinite}.floatcard{position:absolute;padding:14px 16px;border:1px solid #27344a;background:#0d1420dd;backdrop-filter:blur(14px);border-radius:14px;box-shadow:0 18px 50px #0006;font-size:13px}.fc1{top:30px;right:0}.fc2{bottom:42px;left:0}.section{max-width:1180px;margin:auto;padding:60px 5%}.sectionhead{display:flex;justify-content:space-between;align-items:end;margin-bottom:25px}.section h2{font-size:34px;margin:8px 0}.muted{color:#8795aa;font-size:14px}.filters{display:flex;gap:9px;overflow:auto;padding-bottom:14px}.filter{white-space:nowrap;background:#0b111b;color:#9ba8bb;border:1px solid #1c283a;border-radius:999px;padding:9px 14px}.filter.active,.filter:hover{color:#fff;border-color:#6651ca;background:#17132d}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:17px}.card{position:relative;background:linear-gradient(160deg,#101826,#0b1019);border:1px solid #1b2739;border-radius:19px;padding:20px;overflow:hidden;transition:.25s}.card:hover{transform:translateY(-6px);border-color:#364764;box-shadow:0 20px 50px #0006}.cardtop{display:flex;justify-content:space-between;align-items:center}.producticon{width:45px;height:45px;border-radius:13px;display:grid;place-items:center;background:#161d2b;font-size:22px}.badge{font-size:10px;color:#5eead4;background:#0d2825;padding:6px 8px;border-radius:7px}.card h3{margin:20px 0 8px;font-size:18px}.desc{font-size:13px;color:#7f8ca0;min-height:40px}.price{font-size:25px;font-weight:900;margin:17px 0 3px}.price small{font-size:11px;color:#738096;font-weight:600}.meta{font-size:12px;color:#69778b;margin-bottom:16px}.buy{width:100%;padding:12px;border-radius:10px}.features{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.feature{padding:20px;border:1px solid #1b2739;background:#0c121c;border-radius:16px}.feature b{display:block;margin:8px 0}.feature span{font-size:12px;color:#7f8ca0;line-height:1.5}.footer{border-top:1px solid #182131;margin-top:40px;padding:40px 5%;color:#718096;display:flex;justify-content:space-between;font-size:12px}.modal{position:fixed;inset:0;z-index:100;display:none;place-items:center;background:#0009;backdrop-filter:blur(8px);padding:18px}.modal.show{display:grid}.modalbox{width:min(510px,100%);background:#0d1420;border:1px solid #29364c;border-radius:22px;padding:25px;box-shadow:0 30px 100px #000}.modalhead{display:flex;justify-content:space-between}.close{background:none;border:0;color:#8391a6;font-size:25px}.modal h2{margin:8px 0}.modal p{color:#7f8ca0;font-size:13px}.field{margin:17px 0}.field label{display:block;font-size:12px;color:#a9b5c6;margin-bottom:7px}.field input{width:100%;background:#080d15;border:1px solid #263248;color:white;border-radius:10px;padding:13px;outline:none}.field input:focus{border-color:#7658f6}.total{display:flex;justify-content:space-between;background:#080d15;border:1px solid #1e2a3c;padding:15px;border-radius:11px;margin:18px 0}.success{text-align:center}.success .big{font-size:54px}.orderid{display:inline-block;margin:10px 0;padding:8px 11px;border-radius:8px;background:#141c2a;color:#75e9d9;font-family:monospace}.adminpanel{display:none}.adminpanel.show{display:block}.adminlogin{max-width:430px;margin:80px auto}.dash{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:20px 0}.stat{padding:18px;background:#0c121c;border:1px solid #1b2739;border-radius:15px}.stat span{font-size:11px;color:#7f8ca0}.stat b{display:block;font-size:24px;margin-top:7px}.admintable{border:1px solid #1b2739;border-radius:15px;overflow:hidden}.row{display:grid;grid-template-columns:1.6fr .7fr .7fr .8fr;padding:14px 16px;border-bottom:1px solid #1a2535;font-size:13px}.row:last-child{border:0}.row.head{color:#748197;font-size:11px;text-transform:uppercase}.notice{padding:12px 14px;background:#171329;border:1px solid #342b5d;border-radius:10px;color:#b8b0e9;font-size:12px;margin:15px 0}
+.toast{position:fixed;right:18px;bottom:18px;z-index:200;background:#111a27;border:1px solid #2a3a51;padding:13px 16px;border-radius:12px;box-shadow:0 15px 40px #0008;animation:toast .25s}
+@keyframes float{50%{transform:translate(-50%,-57%) rotate(3deg)}}@keyframes spin{to{transform:rotate(360deg)}}@keyframes toast{from{transform:translateY(15px);opacity:0}to{transform:none;opacity:1}}
+@media(max-width:850px){.hero{grid-template-columns:1fr;min-height:auto;padding-top:65px}.visual{height:300px}.grid{grid-template-columns:repeat(2,1fr)}.features{grid-template-columns:repeat(2,1fr)}.dash{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.navlinks{display:none}.hero h1{letter-spacing:-2px}.grid{grid-template-columns:1fr}.features{grid-template-columns:1fr 1fr}.section{padding-top:45px}.footer{flex-direction:column;gap:10px}.row{grid-template-columns:1.3fr .7fr .7fr}.row>*:last-child{display:none}}
+</style>
+</head>
+<body>
+<nav class="nav">
+  <a class="logo" href="#" onclick="goHome()">NOVA<span>STORE</span></a>
+  <div class="navlinks"><a href="#products">Products</a><a href="#features">Why us</a><a href="#orders">Orders</a></div>
+  <button class="admin-btn" onclick="openAdmin()">Admin</button>
+</nav>
+
+<div id="store">
+<section class="hero">
+  <div>
+    <div class="eyebrow">DIGITAL MARKETPLACE · DEMO</div>
+    <h1>Premium digital.<br><span class="grad">Delivered simply.</span></h1>
+    <p>A polished storefront concept for digital products, subscriptions, keys and authorized digital goods. This demo uses simulated checkout and orders — no real payment or supplier order is made.</p>
+    <div class="actions"><a class="btn" href="#products">Explore products ↓</a><button class="btn alt" onclick="showToast('Demo mode — no real payment is collected.')">How it works</button></div>
+  </div>
+  <div class="visual"><div class="ring"></div><div class="core">✦</div><div class="floatcard fc1">⚡ Instant delivery<br><small>For eligible products</small></div><div class="floatcard fc2">🔒 Secure checkout<br><small>Demo environment</small></div></div>
+</section>
+
+<section class="section" id="products">
+ <div class="sectionhead"><div><div class="eyebrow">CATALOG</div><h2>Featured products</h2></div><div class="muted">Demo inventory · 6 items</div></div>
+ <div class="filters"><button class="filter active" onclick="filterProducts('All',this)">All</button><button class="filter" onclick="filterProducts('Subscription',this)">Subscriptions</button><button class="filter" onclick="filterProducts('Key',this)">Keys</button><button class="filter" onclick="filterProducts('Gift Card',this)">Gift Cards</button></div>
+ <div class="grid" id="productGrid"></div>
+</section>
+
+<section class="section" id="features">
+ <div class="eyebrow">BUILT LIKE A REAL STORE</div><h2>Everything customers expect</h2>
+ <div class="features">
+  <div class="feature">⚡<b>Fast delivery</b><span>Instant or pending delivery states can be shown clearly.</span></div>
+  <div class="feature">🛡️<b>Protected checkout</b><span>Ready for a proper payment gateway when launched.</span></div>
+  <div class="feature">📦<b>Order tracking</b><span>Customers can keep an order ID and check its status.</span></div>
+  <div class="feature">👑<b>Admin control</b><span>Products, pricing and order overview in one dashboard.</span></div>
+ </div>
+</section>
+
+<section class="section" id="orders">
+ <div class="sectionhead"><div><div class="eyebrow">ORDER CENTER</div><h2>Track an order</h2></div></div>
+ <div class="card"><div style="display:flex;gap:10px;flex-wrap:wrap"><input id="trackId" placeholder="Enter demo order ID e.g. NV-10482" style="flex:1;min-width:230px;padding:13px;border-radius:10px;background:#080d15;border:1px solid #263248;color:#fff"><button class="btn" onclick="trackOrder()">Track order</button></div></div>
+</section>
+</div>
+
+<div id="admin" class="adminpanel">
+<section class="section adminlogin" id="loginBox">
+ <div class="formcard card"><div class="eyebrow">RESTRICTED AREA</div><h2>Admin access</h2><p class="muted">Demo admin panel. In a real deployment this must be protected by server-side authentication.</p>
+ <div class="field"><label>Username</label><input id="adminUser" value="admin"></div>
+ <div class="field"><label>Password</label><input id="adminPass" type="password" placeholder="••••••••"></div>
+ <button class="btn" style="width:100%" onclick="loginAdmin()">Sign in to demo</button>
+ <div class="notice">Demo password: <b>demo123</b></div>
+ <button class="btn alt" style="width:100%" onclick="goHome()">← Back to store</button>
+ </div>
+</section>
+<section class="section" id="dashboard" style="display:none">
+ <div class="sectionhead"><div><div class="eyebrow">CONTROL CENTER</div><h2>Admin Dashboard</h2></div><button class="btn alt" onclick="logoutAdmin()">Logout</button></div>
+ <div class="notice">DEMO MODE — changes are stored only in this browser. No real API, payment or order is triggered.</div>
+ <div class="dash"><div class="stat"><span>TOTAL SALES</span><b id="sales">₹12,480</b></div><div class="stat"><span>ORDERS</span><b>148</b></div><div class="stat"><span>PRODUCTS</span><b>6</b></div><div class="stat"><span>PENDING</span><b>12</b></div></div>
+ <div class="card" style="margin-bottom:18px"><h3>Add demo product</h3><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><input id="newName" placeholder="Product name"><input id="newPrice" type="number" placeholder="Price"><button class="btn" style="grid-column:1/-1" onclick="addDemoProduct()">Add product</button></div></div>
+ <div class="admintable"><div class="row head"><span>Product</span><span>Price</span><span>Status</span><span>Action</span></div><div id="adminRows"></div></div>
+</section>
+</div>
+
+<div class="modal" id="buyModal" onclick="if(event.target===this)closeModal('buyModal')"><div class="modalbox">
+ <div class="modalhead"><div><div class="eyebrow">DEMO CHECKOUT</div><h2 id="mName">Product</h2></div><button class="close" onclick="closeModal('buyModal')">×</button></div>
+ <p>Complete the form to create a simulated order. No money is charged.</p>
+ <div class="field"><label>Email address</label><input id="buyerEmail" type="email" placeholder="you@example.com"></div>
+ <div class="field"><label>Quantity</label><input id="buyerQty" type="number" min="1" value="1" oninput="calcTotal()"></div>
+ <div class="total"><span>Total</span><b id="mTotal">₹0.00</b></div>
+ <button class="btn" style="width:100%" onclick="placeDemoOrder()">Place demo order →</button>
+</div></div>
+
+<div class="modal" id="successModal" onclick="if(event.target===this)closeModal('successModal')"><div class="modalbox success">
+ <div class="big">✓</div><div class="eyebrow">ORDER CREATED</div><h2>Demo order confirmed</h2><p>No real transaction was made. Your demo order reference is:</p><div class="orderid" id="orderRef"></div><p id="orderText"></p><button class="btn" onclick="closeModal('successModal');location.hash='orders'">Track this order</button>
+</div></div>
+
+<script>
+const products=[
+{id:1,name:"Premium Subscription Key",cat:"Subscription",icon:"✦",price:99,desc:"Example digital subscription key with instant delivery.",tag:"INSTANT"},
+{id:2,name:"Family Plan Upgrade",cat:"Subscription",icon:"◈",price:149,desc:"Example family-plan digital upgrade product.",tag:"POPULAR"},
+{id:3,name:"Cloud Storage Key",cat:"Key",icon:"☁",price:199,desc:"Example license key for a digital storage service.",tag:"KEY"},
+{id:4,name:"Gaming Gift Card",cat:"Gift Card",icon:"◉",price:499,desc:"Demo gift card listing with a clean delivery flow.",tag:"HOT"},
+{id:5,name:"Productivity Pro Key",cat:"Key",icon:"⌁",price:299,desc:"Example software license product for the catalog.",tag:"NEW"},
+{id:6,name:"Streaming Voucher",cat:"Gift Card",icon:"▶",price:399,desc:"Example authorized voucher-style digital product.",tag:"LIMITED"}];
+let selected=null,currentFilter="All",adminProducts=[...products];
+function renderProducts(){
+ const arr=currentFilter==="All"?products:products.filter(p=>p.cat===currentFilter);
+ document.getElementById("productGrid").innerHTML=arr.map(p=>`<article class="card"><div class="cardtop"><div class="producticon">${p.icon}</div><span class="badge">${p.tag}</span></div><h3>${p.name}</h3><div class="desc">${p.desc}</div><div class="price">₹${p.price.toFixed(2)} <small>/ unit</small></div><div class="meta">Min 1 · Max 50 · ${p.cat}</div><button class="btn buy" onclick="openBuy(${p.id})">Buy now →</button></article>`).join("");
+}
+function filterProducts(f,b){currentFilter=f;document.querySelectorAll(".filter").forEach(x=>x.classList.remove("active"));b.classList.add("active");renderProducts()}
+function openBuy(id){selected=products.find(p=>p.id===id);document.getElementById("mName").textContent=selected.name;document.getElementById("buyerEmail").value="";document.getElementById("buyerQty").value=1;calcTotal();document.getElementById("buyModal").classList.add("show")}
+function closeModal(id){document.getElementById(id).classList.remove("show")}
+function calcTotal(){if(selected)document.getElementById("mTotal").textContent="₹"+(selected.price*(+document.getElementById("buyerQty").value||1)).toFixed(2)}
+function placeDemoOrder(){
+ const email=document.getElementById("buyerEmail").value.trim(),qty=Math.max(1,+document.getElementById("buyerQty").value||1);
+ if(!email.includes("@")){showToast("Please enter a valid email.");return}
+ const ref="NV-"+Math.floor(10000+Math.random()*89999);
+ localStorage.setItem("demoOrder_"+ref,JSON.stringify({ref,email,qty,product:selected.name,amount:selected.price*qty,status:"Completed"}));
+ closeModal("buyModal");document.getElementById("orderRef").textContent=ref;document.getElementById("orderText").textContent=selected.name+" · ₹"+(selected.price*qty).toFixed(2);document.getElementById("successModal").classList.add("show");
+}
+function trackOrder(){let id=document.getElementById("trackId").value.trim();let o=localStorage.getItem("demoOrder_"+id);if(!o){showToast("Demo order not found.");return}o=JSON.parse(o);document.getElementById("orderRef").textContent=o.ref;document.getElementById("orderText").textContent=o.product+" · "+o.status+" · ₹"+o.amount.toFixed(2);document.getElementById("successModal").classList.add("show")}
+function showToast(t){let x=document.createElement("div");x.className="toast";x.textContent=t;document.body.appendChild(x);setTimeout(()=>x.remove(),2600)}
+function openAdmin(){document.getElementById("store").style.display="none";document.getElementById("admin").classList.add("show");window.scrollTo(0,0)}
+function goHome(){document.getElementById("admin").classList.remove("show");document.getElementById("store").style.display="block";window.scrollTo(0,0)}
+function loginAdmin(){if(document.getElementById("adminUser").value==="admin"&&document.getElementById("adminPass").value==="demo123"){sessionStorage.setItem("demoAdmin","1");showDashboard()}else showToast("Invalid demo credentials.")}
+function showDashboard(){document.getElementById("loginBox").style.display="none";document.getElementById("dashboard").style.display="block";renderAdmin()}
+function logoutAdmin(){sessionStorage.removeItem("demoAdmin");document.getElementById("dashboard").style.display="none";document.getElementById("loginBox").style.display="block"}
+function addDemoProduct(){let n=document.getElementById("newName").value.trim(),p=+document.getElementById("newPrice").value;if(!n||!p){showToast("Enter product name and price.");return}adminProducts.push({name:n,price:p,cat:"Key",status:"Active"});renderAdmin();showToast("Demo product added.")}
+function renderAdmin(){document.getElementById("adminRows").innerHTML=adminProducts.map((p,i)=>`<div class="row"><span>${p.name}</span><span>₹${(+p.price).toFixed(2)}</span><span style="color:#5eead4">Active</span><button class="btn alt" style="padding:7px 10px" onclick="hideProduct(${i})">Hide</button></div>`).join("")}
+function hideProduct(i){adminProducts[i].status="Hidden";document.querySelectorAll("#adminRows .row")[i+1].children[2].textContent="Hidden";document.querySelectorAll("#adminRows .row")[i+1].children[2].style.color="#f0a86b";showToast("Product hidden in demo panel.")}
+renderProducts();if(sessionStorage.getItem("demoAdmin")){openAdmin();showDashboard()}
+</script>
+</body>
+</html>
