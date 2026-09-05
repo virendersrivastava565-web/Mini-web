@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>StreamVault OTT — Demo</title>
+<style>
+:root{
+ --bg:#070914;--panel:#0e1222;--panel2:#12182b;--line:#202943;
+ --text:#f7f8ff;--muted:#929ab3;--accent:#7c5cff;--accent2:#19d3ff;
+ --green:#35e09b;--red:#ff5d78;--shadow:0 20px 70px #0008;
+}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;background:
+radial-gradient(circle at 80% 0%,#30205c55,transparent 35%),radial-gradient(circle at 0% 50%,#073d5550,transparent 30%),var(--bg);color:var(--text)}
+button,input{font:inherit}button{cursor:pointer}
+.hidden{display:none!important}
+#auth{min-height:100vh;display:grid;place-items:center;padding:22px;position:relative;overflow:hidden}
+.orb{position:absolute;width:360px;height:360px;border-radius:50%;filter:blur(70px);opacity:.2;animation:float 7s ease-in-out infinite}
+.o1{background:#7c5cff;left:-100px;top:-80px}.o2{background:#19d3ff;right:-120px;bottom:-120px;animation-delay:-3s}
+@keyframes float{50%{transform:translate(30px,-20px) scale(1.12)}}
+.auth-card{width:min(430px,100%);background:#0d1120dd;border:1px solid #ffffff12;border-radius:26px;padding:30px;box-shadow:var(--shadow);backdrop-filter:blur(20px);animation:up .6s ease}
+@keyframes up{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+.logo{display:flex;align-items:center;gap:11px;font-weight:800;font-size:21px}.logo-mark{width:42px;height:42px;border-radius:13px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:grid;place-items:center;box-shadow:0 10px 30px #6952ff55}
+.auth-card h1{font-size:30px;margin:25px 0 7px}.sub{color:var(--muted);margin:0 0 24px}
+.field{margin:13px 0}.field label{font-size:12px;color:#aab1c8;display:block;margin:0 0 7px}.field input{width:100%;background:#090d19;border:1px solid var(--line);color:white;padding:13px 14px;border-radius:12px;outline:none;transition:.2s}.field input:focus{border-color:var(--accent);box-shadow:0 0 0 4px #7c5cff18}
+.primary{width:100%;border:0;color:white;padding:13px 16px;border-radius:12px;background:linear-gradient(100deg,var(--accent),#5f8cff);font-weight:750;box-shadow:0 12px 30px #6e58ff35;transition:.2s}.primary:hover{transform:translateY(-2px);filter:brightness(1.08)}
+.switch{text-align:center;color:var(--muted);font-size:13px;margin-top:17px}.switch b{color:#b8adff;cursor:pointer}.demo-note{margin-top:16px;padding:11px;border-radius:11px;background:#ffffff06;border:1px solid #ffffff09;color:#8f98b2;font-size:11px;text-align:center}
+#app{min-height:100vh}.top{height:70px;position:sticky;top:0;z-index:20;background:#080b17dd;border-bottom:1px solid #ffffff0b;backdrop-filter:blur(18px);display:flex;align-items:center;justify-content:space-between;padding:0 25px 0 88px}
+.user-pill{display:flex;align-items:center;gap:10px;color:#aeb5cb;font-size:13px}.avatar{width:35px;height:35px;border-radius:50%;background:linear-gradient(135deg,#7c5cff,#19d3ff);display:grid;place-items:center;color:white;font-weight:800}
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:245px;background:#0a0e1b;border-right:1px solid #ffffff0b;padding:22px 13px;z-index:30;transition:.3s}.side-logo{padding:3px 12px 25px}.nav{display:grid;gap:7px}.nav button{border:0;background:transparent;color:#858da5;text-align:left;padding:12px 13px;border-radius:11px;display:flex;gap:11px;align-items:center;transition:.2s}.nav button:hover,.nav button.active{background:#7c5cff18;color:#fff}.nav button.active{box-shadow:inset 3px 0 var(--accent)}
+.content{margin-left:245px;padding:34px;max-width:1250px}.hero{border:1px solid #ffffff0d;border-radius:22px;padding:28px;background:linear-gradient(110deg,#17122b,#0d1b2a);position:relative;overflow:hidden}.hero:after{content:"";position:absolute;width:280px;height:280px;border-radius:50%;background:#7c5cff35;filter:blur(60px);right:-100px;top:-130px}.hero h1{font-size:32px;margin:0 0 8px}.hero p{color:#a2aac0;margin:0;max-width:620px}.badge{display:inline-block;padding:6px 10px;border-radius:99px;background:#35e09b15;color:var(--green);font-size:11px;margin-bottom:12px}
+.section-head{display:flex;justify-content:space-between;align-items:center;margin:30px 0 15px}.section-head h2{font-size:19px;margin:0}.section-head span{font-size:12px;color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:15px}.card{background:linear-gradient(145deg,#11162a,#0d1120);border:1px solid #ffffff0b;border-radius:17px;padding:16px;transition:.25s;animation:cardIn .5s both}.card:hover{transform:translateY(-5px);border-color:#7c5cff44;box-shadow:0 18px 45px #0005}@keyframes cardIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.poster{height:125px;border-radius:13px;display:grid;place-items:center;font-size:27px;font-weight:900;letter-spacing:-1px;margin-bottom:13px;position:relative;overflow:hidden}.poster:before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,#ffffff12,transparent 45%,#0004)}.yt{background:linear-gradient(135deg,#ff1838,#9e0019)}.net{background:linear-gradient(135deg,#171717,#5b0000)}.prime{background:linear-gradient(135deg,#073b61,#12a9df)}.hot{background:linear-gradient(135deg,#33104e,#e02b62)}.zee{background:linear-gradient(135deg,#052b25,#19a875)}.sonyl{background:linear-gradient(135deg,#14135a,#5149e8)}.card h3{font-size:15px;margin:0 0 5px}.price{font-size:20px;font-weight:800}.price small{font-size:11px;color:var(--muted);font-weight:500}.meta{color:var(--muted);font-size:11px;margin:8px 0 13px}.buy{width:100%;border:0;border-radius:10px;padding:10px;background:#ffffff0a;color:#fff;font-weight:700}.buy:hover{background:var(--accent)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}.stat{padding:18px;border:1px solid #ffffff0b;border-radius:15px;background:#ffffff04}.stat span{font-size:11px;color:var(--muted)}.stat b{display:block;font-size:23px;margin-top:5px}
+.page{display:none}.page.active{display:block;animation:up .35s ease}
+.table{overflow:auto;border:1px solid #ffffff0b;border-radius:14px;background:#0d1120}.row{min-width:650px;display:grid;grid-template-columns:1.2fr 1fr 1fr 1fr;padding:14px 16px;border-bottom:1px solid #ffffff08;font-size:13px}.row.head{color:#7f88a2;font-size:11px}.status{color:var(--green)}
+.support{position:fixed;right:22px;bottom:22px;width:54px;height:54px;border-radius:18px;border:1px solid #ffffff20;background:linear-gradient(135deg,var(--accent),#546eff);color:white;font-size:22px;box-shadow:0 12px 35px #0008;z-index:40}.toast{position:fixed;right:22px;top:85px;background:#151b2e;border:1px solid #ffffff15;padding:13px 16px;border-radius:12px;box-shadow:var(--shadow);z-index:100;animation:toast .3s ease}.modal-bg{position:fixed;inset:0;background:#0009;backdrop-filter:blur(8px);display:grid;place-items:center;z-index:80}.modal{width:min(400px,calc(100% - 30px));background:#101528;border:1px solid #ffffff14;border-radius:20px;padding:23px;animation:up .25s ease}.modal h2{margin-top:0}.close{float:right;border:0;background:#ffffff0b;color:#fff;border-radius:9px;padding:7px 10px}
+@media(max-width:900px){.sidebar{width:70px}.side-logo .logo-text,.nav button span{display:none}.nav button{justify-content:center}.content{margin-left:70px;padding:22px}.grid{grid-template-columns:repeat(2,1fr)}.top{padding-left:90px}}
+@media(max-width:560px){.grid,.stats{grid-template-columns:1fr}.content{padding:15px}.hero h1{font-size:25px}.top{padding-right:15px}}
+</style>
+</head>
+<body>
+
+<section id="auth">
+<div class="orb o1"></div><div class="orb o2"></div>
+<div class="auth-card">
+  <div class="logo"><div class="logo-mark">▶</div><span>StreamVault</span></div>
+  <div id="loginBox">
+    <h1>Welcome back</h1><p class="sub">Sign in to access your OTT dashboard.</p>
+    <div class="field"><label>EMAIL</label><input id="loginEmail" type="email" placeholder="you@example.com"></div>
+    <div class="field"><label>PASSWORD</label><input id="loginPass" type="password" placeholder="••••••••"></div>
+    <button class="primary" onclick="login()">Login securely</button>
+    <div class="switch">New here? <b onclick="toggleAuth()">Create account</b></div>
+  </div>
+  <div id="signupBox" class="hidden">
+    <h1>Create account</h1><p class="sub">Create a demo account in seconds.</p>
+    <div class="field"><label>NAME</label><input id="signName" placeholder="Your name"></div>
+    <div class="field"><label>EMAIL</label><input id="signEmail" type="email" placeholder="you@example.com"></div>
+    <div class="field"><label>PASSWORD</label><input id="signPass" type="password" placeholder="Create password"></div>
+    <button class="primary" onclick="signup()">Create account</button>
+    <div class="switch">Already registered? <b onclick="toggleAuth()">Login</b></div>
+  </div>
+  <div class="demo-note">DEMO UI • No real payment or OTT activation is performed.</div>
+</div>
+</section>
+
+<div id="app" class="hidden">
+<aside class="sidebar">
+  <div class="side-logo"><div class="logo"><div class="logo-mark">▶</div><span class="logo-text">StreamVault</span></div></div>
+  <div class="nav">
+    <button class="active" onclick="page('home',this)">⌂ <span>Home</span></button>
+    <button onclick="page('services',this)">▣ <span>OTT Services</span></button>
+    <button onclick="page('orders',this)">◷ <span>My Orders</span></button>
+    <button onclick="page('wallet',this)">◈ <span>Wallet</span></button>
+    <button onclick="page('profile',this)">◎ <span>Profile</span></button>
+    <button onclick="admin()" >⚙ <span>Admin Panel</span></button>
+    <button onclick="logout()">↪ <span>Logout</span></button>
+  </div>
+</aside>
+<header class="top"><div></div><div class="user-pill"><span id="welcomeName">User</span><div class="avatar" id="avatar">U</div></div></header>
+
+<main class="content">
+<section id="home" class="page active">
+  <div class="hero"><span class="badge">● DEMO STORE ONLINE</span><h1>Premium entertainment, one dashboard.</h1><p>Browse OTT packs, manage demo orders, and keep everything organized from one smooth interface.</p></div>
+  <div class="stats"><div class="stat"><span>WALLET BALANCE</span><b>₹2,450.00</b></div><div class="stat"><span>ACTIVE PACKS</span><b>3</b></div><div class="stat"><span>TOTAL ORDERS</span><b>12</b></div></div>
+  <div class="section-head"><h2>Popular OTT Packs</h2><span>Demo pricing</span></div><div class="grid" id="homeGrid"></div>
+</section>
+
+<section id="services" class="page"><div class="section-head"><h2>OTT Services</h2><span>Choose a pack</span></div><div class="grid" id="serviceGrid"></div></section>
+
+<section id="orders" class="page"><div class="section-head"><h2>My Orders</h2><span>Recent activity</span></div>
+<div class="table"><div class="row head"><span>ORDER</span><span>SERVICE</span><span>DATE</span><span>STATUS</span></div>
+<div class="row"><span>#SV-1048</span><span>YouTube Premium</span><span>05 Sep 2026</span><span class="status">Active</span></div>
+<div class="row"><span>#SV-1041</span><span>Netflix Demo</span><span>03 Sep 2026</span><span class="status">Active</span></div>
+<div class="row"><span>#SV-1036</span><span>Prime Video</span><span>01 Sep 2026</span><span class="status">Completed</span></div></div></section>
+
+<section id="wallet" class="page"><div class="hero"><span class="badge">DEMO WALLET</span><h1>₹2,450.00</h1><p>Demo balance for UI testing. No real payment is processed.</p><br><button class="primary" style="width:auto" onclick="toast('Demo add-money flow opened')">＋ Add Money</button></div></section>
+
+<section id="profile" class="page"><div class="card"><h2>Profile</h2><div class="field"><label>NAME</label><input id="profileName"></div><div class="field"><label>EMAIL</label><input id="profileEmail" disabled></div><button class="primary" onclick="toast('Profile saved in demo mode')">Save Changes</button></div></section>
+
+<section id="adminPage" class="page"><div class="hero"><span class="badge">ADMIN MODE</span><h1>Control Center</h1><p>Manage demo services, users, orders and store settings.</p></div><div class="stats"><div class="stat"><span>USERS</span><b>1,284</b></div><div class="stat"><span>ORDERS</span><b>4,821</b></div><div class="stat"><span>REVENUE</span><b>₹8.42L</b></div></div><div class="section-head"><h2>Admin Actions</h2></div><div class="grid"><div class="card"><h3>▣ Services</h3><p class="meta">Add, edit or disable demo OTT packs.</p><button class="buy" onclick="toast('Service manager opened')">Manage</button></div><div class="card"><h3>♙ Users</h3><p class="meta">View demo customers and accounts.</p><button class="buy" onclick="toast('User manager opened')">Manage</button></div><div class="card"><h3>◷ Orders</h3><p class="meta">Review orders and statuses.</p><button class="buy" onclick="toast('Order manager opened')">Manage</button></div><div class="card"><h3>⚙ Settings</h3><p class="meta">Store configuration and controls.</p><button class="buy" onclick="toast('Settings opened')">Open</button></div></div></section>
+</main>
+<button class="support" onclick="support()">?</button>
+</div>
+
+<div id="modalBg" class="modal-bg hidden"><div class="modal"><button class="close" onclick="closeModal()">×</button><h2 id="modalTitle">Support</h2><p id="modalText" class="sub">How can we help?</p><button class="primary" onclick="closeModal()">Close</button></div></div>
+<script>
+const services=[
+ {name:"YouTube Premium",icon:"▶",price:129,cls:"yt",meta:"30 Days • Individual"},
+ {name:"Netflix",icon:"N",price:179,cls:"net",meta:"30 Days • Standard"},
+ {name:"Prime Video",icon:"prime",price:99,cls:"prime",meta:"30 Days • Full HD"},
+ {name:"JioHotstar",icon:"★",price:149,cls:"hot",meta:"30 Days • Premium"},
+ {name:"ZEE5 Premium",icon:"ZEE5",price:119,cls:"zee",meta:"30 Days • Premium"},
+ {name:"SonyLIV",icon:"SONY",price:139,cls:"sonyl",meta:"30 Days • Premium"}
+];
+function cards(){return services.map((s,i)=>`<div class="card" style="animation-delay:${i*60}ms"><div class="poster ${s.cls}">${s.icon}</div><h3>${s.name}</h3><div class="price">₹${s.price} <small>/ month</small></div><div class="meta">${s.meta}</div><button class="buy" onclick="buy('${s.name}',${s.price})">Get Pack</button></div>`).join('')}
+homeGrid.innerHTML=cards().replace(/<div class="card"/g,'<div class="card"').split('</div>').slice(0,4).join('</div>')+'</div></div></div></div>'; // harmless visual rebuild below
+homeGrid.innerHTML=services.slice(0,4).map((s,i)=>`<div class="card" style="animation-delay:${i*60}ms"><div class="poster ${s.cls}">${s.icon}</div><h3>${s.name}</h3><div class="price">₹${s.price} <small>/ month</small></div><div class="meta">${s.meta}</div><button class="buy" onclick="buy('${s.name}',${s.price})">Get Pack</button></div>`).join('');
+serviceGrid.innerHTML=cards();
+function toggleAuth(){loginBox.classList.toggle('hidden');signupBox.classList.toggle('hidden')}
+function signup(){let n=signName.value.trim(),e=signEmail.value.trim(),p=signPass.value;if(!n||!e||!p)return toast('Please complete all fields');localStorage.setItem('svUser',JSON.stringify({name:n,email:e}));openApp()}
+function login(){let e=loginEmail.value.trim(),p=loginPass.value;if(!e||!p)return toast('Enter email and password');localStorage.setItem('svUser',JSON.stringify({name:e.split('@')[0],email:e}));openApp()}
+function openApp(){let u=JSON.parse(localStorage.getItem('svUser'));auth.classList.add('hidden');app.classList.remove('hidden');welcomeName.textContent=u.name;avatar.textContent=u.name[0].toUpperCase();profileName.value=u.name;profileEmail.value=u.email}
+function logout(){localStorage.removeItem('svUser');app.classList.add('hidden');auth.classList.remove('hidden');toast('Logged out successfully')}
+function page(id,btn){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));btn.classList.add('active')}
+function admin(){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));adminPage.classList.add('active');document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'))}
+function buy(name,price){modalTitle.textContent='Confirm Demo Order';modalText.innerHTML=`<b>${name}</b><br><br>Demo price: ₹${price}<br><small style="color:#8f98b2">No real payment or activation will occur.</small><br><br><button class="primary" onclick="closeModal();toast('Demo order created for ${name}')">Confirm Order</button>`;modalBg.classList.remove('hidden')}
+function support(){modalTitle.textContent='Support Center';modalText.innerHTML='Need help? This is a demo support center.<br><br><b>Live Chat</b> • Available<br><b>Ticket</b> • Create a ticket<br><b>Email</b> • support@example.com';modalBg.classList.remove('hidden')}
+function closeModal(){modalBg.classList.add('hidden')}
+function toast(t){let x=document.createElement('div');x.className='toast';x.textContent=t;document.body.appendChild(x);setTimeout(()=>x.remove(),2400)}
+if(localStorage.getItem('svUser'))openApp();
+</script>
+</body>
+</html>
