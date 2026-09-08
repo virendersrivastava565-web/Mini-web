@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#07070b">
+<title>AuraKart — Digital Hub</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{--bg:#06060a;--card:rgba(17,17,25,.72);--card2:rgba(255,255,255,.045);--line:rgba(255,255,255,.09);--text:#f7f7fb;--muted:#9898a7;--p:#8958ff;--b:#5682ff;--green:#42dfa0}
+html{scroll-behavior:smooth}body{min-height:100vh;background:radial-gradient(circle at 10% 0%,rgba(133,76,255,.17),transparent 30%),radial-gradient(circle at 100% 18%,rgba(65,125,255,.12),transparent 30%),linear-gradient(180deg,#08080d,#050508 80%);color:var(--text);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;overflow-x:hidden}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.15;background-image:radial-gradient(rgba(255,255,255,.65) .5px,transparent .5px);background-size:27px 27px;mask-image:linear-gradient(#000,transparent 75%)}
+a{text-decoration:none;color:inherit}.app{max-width:590px;margin:auto;padding:15px 15px 105px}
+.top{display:flex;align-items:center;justify-content:space-between;padding:3px 2px 22px}.brand{display:flex;align-items:center;gap:10px;font-weight:850;letter-spacing:-.5px}.mark{width:37px;height:37px;border-radius:12px;display:grid;place-items:center;font-size:21px;font-weight:900;font-style:italic;background:linear-gradient(140deg,#a35dff,#527dff);box-shadow:0 9px 28px rgba(112,77,255,.3)}.online{display:flex;align-items:center;gap:6px;border:1px solid var(--line);background:rgba(255,255,255,.035);padding:8px 10px;border-radius:999px;font-size:10px;color:#b8b8c4}.dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green)}
+.hero{position:relative;text-align:left;border:1px solid var(--line);border-radius:28px;padding:24px 21px;overflow:hidden;background:linear-gradient(135deg,rgba(130,75,255,.13),rgba(48,104,255,.055) 55%,rgba(255,255,255,.025));box-shadow:0 24px 80px rgba(0,0,0,.22);animation:up .7s ease both}.hero:after{content:"";position:absolute;width:210px;height:210px;right:-90px;top:-95px;border-radius:50%;background:rgba(117,79,255,.18);filter:blur(25px)}.eyebrow{font-size:10px;text-transform:uppercase;letter-spacing:2.3px;color:#b49aff;margin-bottom:12px}.hero h1{font-size:36px;line-height:1.04;letter-spacing:-1.8px}.hero h1 span{background:linear-gradient(90deg,#fff,#b98dff,#75a0ff);-webkit-background-clip:text;color:transparent}.hero p{font-size:13px;color:var(--muted);line-height:1.65;margin-top:11px;max-width:430px}.hero-actions{display:flex;gap:9px;margin-top:18px}.btn{flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:12px;border-radius:14px;font-size:12px;font-weight:750;border:1px solid var(--line);background:rgba(255,255,255,.05)}.btn.primary{border:0;background:linear-gradient(100deg,#7648e9,#557bf5);box-shadow:0 10px 25px rgba(88,75,230,.25)}
+.section{margin-top:22px;animation:up .75s ease both}.head{display:flex;justify-content:space-between;align-items:end;margin-bottom:11px}.head h2{font-size:17px;letter-spacing:-.4px}.head small{font-size:10px;color:#71717e}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.stat{border:1px solid var(--line);border-radius:17px;background:var(--card);padding:14px 10px}.stat b{display:block;font-size:18px}.stat span{font-size:9px;color:#858592;margin-top:3px;display:block}
+.quick{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}.q{border:1px solid var(--line);background:var(--card);border-radius:19px;padding:15px;display:flex;align-items:center;gap:11px;transition:.18s}.q:active{transform:scale(.98)}.qicon{width:40px;height:40px;border-radius:13px;display:grid;place-items:center;background:rgba(139,92,246,.11);font-size:18px}.q strong{font-size:12px;display:block}.q small{font-size:9px;color:#7f7f8b}
+.card{border:1px solid var(--line);background:var(--card);border-radius:21px;padding:16px}.rule{display:flex;gap:11px;padding:11px 0;border-bottom:1px solid rgba(255,255,255,.055)}.rule:last-child{border:0;padding-bottom:1px}.num{width:29px;height:29px;flex:0 0 29px;border-radius:9px;display:grid;place-items:center;background:rgba(139,92,246,.12);color:#b99bff;font-size:9px;font-weight:800}.rule b{font-size:12px;display:block;margin-bottom:3px}.rule p{font-size:10px;line-height:1.55;color:#858592}
+.links{display:grid;gap:9px}.link{display:flex;align-items:center;gap:12px;border:1px solid var(--line);background:var(--card);border-radius:18px;padding:13px;transition:.18s}.link:active{transform:scale(.985)}.ico{width:42px;height:42px;display:grid;place-items:center;border-radius:13px;background:linear-gradient(145deg,#171421,#0f111a);font-size:18px}.lm{flex:1}.lm b{font-size:12px;display:block}.lm small{font-size:9px;color:#7f7f8b}.arr{font-size:19px;color:#6d6d79}
+.faq{border:1px solid var(--line);background:var(--card);border-radius:18px;overflow:hidden}.faq button{width:100%;border:0;border-bottom:1px solid rgba(255,255,255,.06);background:transparent;color:#e7e7ed;text-align:left;padding:14px;font:600 11px inherit;display:flex;justify-content:space-between;gap:12px}.faq button:last-of-type{border:0}.ans{display:none;padding:0 14px 14px;color:#878793;font-size:10px;line-height:1.6}.faq .open .ans{display:block}.faq .open button{color:#b99cff}.plus{color:#8d8d9a}
+.support{position:relative;overflow:hidden;border:1px solid rgba(139,92,246,.23);border-radius:22px;padding:19px;background:linear-gradient(135deg,rgba(119,70,238,.15),rgba(52,106,255,.07))}.support h3{font-size:16px}.support p{font-size:10px;color:#90909d;line-height:1.55;margin:6px 0 14px}.support a{display:flex;justify-content:center;align-items:center;padding:12px;border-radius:14px;background:linear-gradient(100deg,#7548e7,#557bf2);font-size:11px;font-weight:800}
+.footer{text-align:center;color:#5e5e69;font-size:9px;line-height:1.7;padding:25px 0 4px}.bottom{position:fixed;z-index:20;bottom:11px;left:50%;transform:translateX(-50%);width:min(560px,calc(100% - 25px));display:grid;grid-template-columns:repeat(3,1fr);gap:5px;padding:6px;border:1px solid rgba(255,255,255,.1);border-radius:19px;background:rgba(9,9,14,.82);backdrop-filter:blur(20px);box-shadow:0 18px 55px rgba(0,0,0,.45)}.bottom a{padding:10px 4px;border-radius:13px;text-align:center;color:#83838f;font-size:10px}.bottom a.active{color:#fff;background:rgba(255,255,255,.07)}
+.toast{position:fixed;z-index:50;left:50%;bottom:80px;transform:translate(-50%,15px);opacity:0;pointer-events:none;background:#17171f;border:1px solid var(--line);padding:9px 13px;border-radius:12px;font-size:10px;transition:.25s}.toast.show{opacity:1;transform:translate(-50%,0)}
+@keyframes up{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:380px){.hero h1{font-size:31px}.stats{gap:6px}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <div class="brand"><div class="mark">A</div>AuraKart</div>
+    <div class="online"><i class="dot"></i> 24×7 Support</div>
+  </header>
+
+  <section class="hero" id="home">
+    <div class="eyebrow">Official Digital Hub</div>
+    <h1>Welcome to <span>AuraKart</span></h1>
+    <p>One clean place for official links, digital products, important updates and support. Simple, secure and built for a better experience.</p>
+    <div class="hero-actions">
+      <a class="btn primary" href="#official">Explore AuraKart&nbsp; →</a>
+      <button class="btn" onclick="shareApp()">↗ Share</button>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="head"><h2>AuraKart at a glance</h2><small>Everything in one place</small></div>
+    <div class="stats">
+      <div class="stat"><b>24×7</b><span>Support access</span></div>
+      <div class="stat"><b>01</b><span>Official hub</span></div>
+      <div class="stat"><b>∞</b><span>Digital possibilities</span></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="head"><h2>Quick Access</h2><small>Tap to explore</small></div>
+    <div class="quick">
+      <a class="q" href="#official"><div class="qicon">✦</div><div><strong>Official</strong><small>Verified links</small></div></a>
+      <a class="q" href="#rules"><div class="qicon">✓</div><div><strong>Rules</strong><small>Read guidelines</small></div></a>
+      <a class="q" href="#faq"><div class="qicon">?</div><div><strong>FAQ</strong><small>Common questions</small></div></a>
+      <a class="q" href="#support"><div class="qicon">◉</div><div><strong>Support</strong><small>Get assistance</small></div></a>
+    </div>
+  </section>
+
+  <section class="section" id="official">
+    <div class="head"><h2>Official AuraKart</h2><small>Use these links</small></div>
+    <div class="links">
+      <!-- Replace these 3 URLs with your real Telegram links -->
+      <a class="link" href="https://t.me/AuraKartBot" target="_blank"><div class="ico">🤖</div><div class="lm"><b>Official Bot</b><small>Open the AuraKart Bot</small></div><div class="arr">›</div></a>
+      <a class="link" href="https://t.me/AuraKart" target="_blank"><div class="ico">📣</div><div class="lm"><b>Official Channel</b><small>Updates & announcements</small></div><div class="arr">›</div></a>
+      <a class="link" href="https://t.me/AuraKartSupport" target="_blank"><div class="ico">◉</div><div class="lm"><b>24×7 Support</b><small>Talk to official support</small></div><div class="arr">›</div></a>
+    </div>
+  </section>
+
+  <section class="section" id="rules">
+    <div class="head"><h2>Rules & Guidelines</h2><small>Important</small></div>
+    <div class="card">
+      <div class="rule"><div class="num">01</div><div><b>Use official links</b><p>For AuraKart-related access, use only the links provided inside this official mini app.</p></div></div>
+      <div class="rule"><div class="num">02</div><div><b>Read before purchase</b><p>Always check product details, validity and applicable terms before placing an order.</p></div></div>
+      <div class="rule"><div class="num">03</div><div><b>Protect your information</b><p>Never share passwords, OTPs, UPI PINs or other sensitive credentials with anyone.</p></div></div>
+      <div class="rule"><div class="num">04</div><div><b>Support first</b><p>If you face an issue, contact the official support team instead of an unknown account.</p></div></div>
+    </div>
+  </section>
+
+  <section class="section" id="faq">
+    <div class="head"><h2>Frequently Asked</h2><small>Quick answers</small></div>
+    <div class="faq">
+      <div><button onclick="faq(this)">Where can I find the official bot? <span class="plus">+</span></button><div class="ans">Use the Official Bot button in the Official AuraKart section above.</div></div>
+      <div><button onclick="faq(this)">Where are announcements posted? <span class="plus">+</span></button><div class="ans">Official updates and announcements can be published through the Official Channel linked in this app.</div></div>
+      <div><button onclick="faq(this)">How do I get help? <span class="plus">+</span></button><div class="ans">Tap 24×7 Support and contact the official support account for assistance.</div></div>
+      <div><button onclick="faq(this)">Can AuraKart offer different digital products? <span class="plus">+</span></button><div class="ans">Yes. The hub is designed as a general digital-product brand, so different categories can be added later.</div></div>
+    </div>
+  </section>
+
+  <section class="section" id="support">
+    <div class="support">
+      <h3>Need a little help?</h3>
+      <p>Have a question or facing an issue? Reach out through the official support channel.</p>
+      <a href="https://t.me/AuraKartSupport" target="_blank">Open 24×7 Support&nbsp; →</a>
+    </div>
+  </section>
+
+  <div class="footer">© 2026 AuraKart • Official Digital Product Hub<br>Only use official AuraKart links shown in this app.</div>
+</div>
+
+<nav class="bottom">
+  <a href="#home" class="active" onclick="nav(this)">⌂<br>Home</a>
+  <a href="#official" onclick="nav(this)">✦<br>Official</a>
+  <a href="#support" onclick="nav(this)">◉<br>Support</a>
+</nav>
+<div id="toast" class="toast"></div>
+
+<script>
+const tg=window.Telegram?.WebApp;
+if(tg){tg.ready();tg.expand();try{tg.setHeaderColor('#07070b');tg.setBackgroundColor('#06060a');}catch(e){}}
+function faq(btn){const box=btn.parentElement;box.classList.toggle('open');btn.querySelector('.plus').textContent=box.classList.contains('open')?'−':'+'}
+function toast(t){const e=document.getElementById('toast');e.textContent=t;e.classList.add('show');clearTimeout(window.tt);window.tt=setTimeout(()=>e.classList.remove('show'),1700)}
+function shareApp(){
+  const url=location.href;
+  if(tg?.openTelegramLink){tg.openTelegramLink('https://t.me/share/url?url='+encodeURIComponent(url)+'&text='+encodeURIComponent('Check out AuraKart — Official Digital Hub'));return}
+  if(navigator.share){navigator.share({title:'AuraKart',text:'AuraKart — Official Digital Hub',url}).catch(()=>{})}
+  else{navigator.clipboard?.writeText(url);toast('App link copied')}
+}
+function nav(el){document.querySelectorAll('.bottom a').forEach(x=>x.classList.remove('active'));el.classList.add('active')}
+</script>
+</body>
+</html>
