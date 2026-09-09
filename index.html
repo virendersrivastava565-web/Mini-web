@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Aurakart OTT Mini App</title>
+  
+  <!-- Telegram WebApp SDK -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            aura: {
+              dark: '#080c14',
+              card: '#111827',
+              border: '#1f293d',
+              accent: '#6366f1',
+              neon: '#a855f7',
+              success: '#10b981'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body {
+      background-color: #080c14;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .glass-card {
+      background: rgba(17, 24, 39, 0.75);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .glass-nav {
+      background: rgba(8, 12, 20, 0.9);
+      backdrop-filter: blur(20px);
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .neon-text {
+      background: linear-gradient(135deg, #818cf8, #c084fc, #f472b6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .custom-scroll::-webkit-scrollbar { width: 4px; }
+    .custom-scroll::-webkit-scrollbar-thumb { background: #374151; border-radius: 4px; }
+  </style>
+</head>
+<body class="text-gray-100 min-h-screen flex flex-col justify-between overflow-x-hidden">
+
+  <!-- ======================== 1. LOGIN / REGISTER SCREEN ======================== -->
+  <div id="authScreen" class="fixed inset-0 z-50 bg-[#080c14] flex flex-col items-center justify-center p-6 transition-all duration-300">
+    <div class="w-full max-w-sm glass-card rounded-3xl p-7 border border-purple-500/30 shadow-2xl shadow-purple-950/40">
+      
+      <div class="text-center mb-6">
+        <div class="w-14 h-14 mx-auto mb-2.5 rounded-2xl bg-gradient-to-tr from-indigo-600 via-purple-600 to-pink-500 flex items-center justify-center shadow-lg shadow-purple-500/30">
+          <i class="fa-solid fa-bolt text-2xl text-white"></i>
+        </div>
+        <h1 class="text-xl font-black tracking-wider neon-text uppercase">AURAKART OTT</h1>
+        <p class="text-xs text-gray-400 mt-0.5">Automated Digital Subscriptions</p>
+      </div>
+
+      <form id="authForm" class="space-y-4" onsubmit="handleAuth(event)">
+        <div>
+          <label class="text-[11px] font-semibold text-gray-400 uppercase tracking-wider block mb-1">Username</label>
+          <div class="relative">
+            <i class="fa-solid fa-user absolute left-4 top-3.5 text-gray-500 text-xs"></i>
+            <input id="authUsername" type="text" required placeholder="Enter username (or 'admin')" 
+                   class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-gray-900 border border-gray-800 text-xs focus:border-purple-500 focus:outline-none">
+          </div>
+        </div>
+
+        <div>
+          <label class="text-[11px] font-semibold text-gray-400 uppercase tracking-wider block mb-1">Password</label>
+          <div class="relative">
+            <i class="fa-solid fa-lock absolute left-4 top-3.5 text-gray-500 text-xs"></i>
+            <input id="authPassword" type="password" required placeholder="Enter password" 
+                   class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-gray-900 border border-gray-800 text-xs focus:border-purple-500 focus:outline-none">
+          </div>
+        </div>
+
+        <div id="authError" class="hidden text-xs text-red-400 bg-red-950/40 border border-red-800/60 p-2.5 rounded-lg text-center font-medium"></div>
+
+        <button type="submit" class="w-full py-3 mt-1 rounded-xl font-bold text-xs bg-gradient-to-r from-indigo-500 via-purple-600 to-pink-500 hover:opacity-90 active:scale-[0.98] transition shadow-lg shadow-purple-500/20">
+          Sign In / Register
+        </button>
+      </form>
+
+      <div class="mt-4 text-center">
+        <button onclick="autoFillTelegramUser()" type="button" class="text-xs text-indigo-400 font-semibold hover:underline">
+          ⚡ Auto-fill from Telegram
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================== 2. HEADER ======================== -->
+  <header class="sticky top-0 z-30 glass-card px-4 py-3 flex items-center justify-between border-b border-gray-800">
+    <!-- 3-Line Menu -->
+    <button onclick="openDrawer()" class="w-9 h-9 rounded-xl bg-gray-900 border border-gray-800 flex items-center justify-center text-gray-300 hover:text-white active:scale-95 transition">
+      <i class="fa-solid fa-bars-staggered text-sm"></i>
+    </button>
+
+    <!-- Logo -->
+    <div class="flex items-center space-x-2">
+      <div class="w-6 h-6 rounded-lg bg-gradient-to-tr from-indigo-500 to-pink-500 flex items-center justify-center">
+        <i class="fa-solid fa-fire text-[10px] text-white"></i>
+      </div>
+      <span class="font-black text-sm tracking-wider neon-text">AURAKART</span>
+    </div>
+
+    <!-- Balance Button -->
+    <button onclick="switchTab('wallet')" class="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-gray-900 border border-purple-500/30 active:scale-95 transition">
+      <i class="fa-solid fa-wallet text-purple-400 text-xs"></i>
+      <span id="headerBalance" class="text-xs font-bold text-gray-100">₹0.00</span>
+      <i class="fa-solid fa-plus text-[9px] text-purple-400 ml-1"></i>
+    </button>
+  </header>
+
+  <!-- ======================== 3. SIDE DRAWER (HAMBURGER) ======================== -->
+  <div id="sideDrawer" class="fixed inset-0 z-40 bg-black/70 backdrop-blur-sm hidden transition-opacity duration-300">
+    <div id="drawerContent" class="w-72 max-w-[80vw] h-full bg-[#0c121e] border-r border-gray-800 p-5 flex flex-col justify-between transform -translate-x-full transition-transform duration-300">
+      <div>
+        <!-- Profile info -->
+        <div class="flex items-center space-x-3 pb-4 border-b border-gray-800">
+          <div id="drawerAvatar" class="w-11 h-11 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-base font-bold shadow">
+            U
+          </div>
+          <div>
+            <h3 id="drawerName" class="font-bold text-sm text-gray-100">User</h3>
+            <p id="drawerUsername" class="text-xs text-purple-400">@username</p>
+          </div>
+        </div>
+
+        <!-- Links -->
+        <nav class="mt-4 space-y-1 text-xs font-medium">
+          <button onclick="drawerNav('store')" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl hover:bg-gray-800/80 text-gray-300 hover:text-white transition">
+            <i class="fa-solid fa-store w-5 text-indigo-400"></i>
+            <span>Services Catalog</span>
+          </button>
+          
+          <button onclick="drawerNav('orders')" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl hover:bg-gray-800/80 text-gray-300 hover:text-white transition">
+            <i class="fa-solid fa-box-archive w-5 text-purple-400"></i>
+            <span>My Orders</span>
+          </button>
+
+          <button onclick="drawerNav('wallet')" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl hover:bg-gray-800/80 text-gray-300 hover:text-white transition">
+            <i class="fa-solid fa-credit-card w-5 text-emerald-400"></i>
+            <span>Deposit UPI & Wallet</span>
+          </button>
+
+          <button onclick="openGiftModal()" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl hover:bg-gray-800/80 text-gray-300 hover:text-white transition">
+            <i class="fa-solid fa-gift w-5 text-pink-400"></i>
+            <span>Redeem Gift Voucher</span>
+          </button>
+
+          <button onclick="drawerNav('refer')" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl hover:bg-gray-800/80 text-gray-300 hover:text-white transition">
+            <i class="fa-solid fa-users w-5 text-amber-400"></i>
+            <span>Refer & Earn (₹5)</span>
+          </button>
+
+          <button onclick="openRulesModal()" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl hover:bg-gray-800/80 text-gray-300 hover:text-white transition">
+            <i class="fa-solid fa-shield-halved w-5 text-blue-400"></i>
+            <span>Warranty & Terms</span>
+          </button>
+
+          <button onclick="openSupportLink()" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl hover:bg-gray-800/80 text-gray-300 hover:text-white transition">
+            <i class="fa-solid fa-headset w-5 text-teal-400"></i>
+            <span>24/7 Support Desk</span>
+          </button>
+
+          <!-- Admin Panel link (Only visible if admin) -->
+          <button id="adminDrawerBtn" onclick="drawerNav('admin')" class="hidden w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl bg-purple-950/50 border border-purple-800 text-purple-300 hover:text-white transition">
+            <i class="fa-solid fa-crown w-5 text-amber-400"></i>
+            <span>Admin Management</span>
+          </button>
+        </nav>
+      </div>
+
+      <!-- Logout -->
+      <div class="pt-3 border-t border-gray-800">
+        <button onclick="handleLogout()" class="w-full flex items-center justify-center space-x-2 py-2 rounded-xl bg-red-950/40 text-red-400 border border-red-800/50 hover:bg-red-900/40 text-xs font-semibold">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i>
+          <span>Logout</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================== 4. MAIN CONTAINER ======================== -->
+  <main class="flex-1 p-4 pb-24 overflow-y-auto custom-scroll">
+    
+    <!-- TAB: STORE CATALOG -->
+    <div id="tabStore">
+      <div class="relative mb-4">
+        <i class="fa-solid fa-magnifying-glass absolute left-4 top-3.5 text-gray-500 text-xs"></i>
+        <input id="searchQuery" oninput="renderProducts()" type="text" placeholder="Search OTT, Canva, Prime, Spotify..." 
+               class="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-gray-900 border border-gray-800 text-xs focus:border-purple-500 focus:outline-none">
+      </div>
+
+      <div class="flex items-center space-x-2 overflow-x-auto pb-2.5 mb-3 custom-scroll text-xs">
+        <button onclick="setCategory('ALL')" class="cat-pill active px-3 py-1 rounded-full bg-purple-600 text-white font-semibold">All</button>
+        <button onclick="setCategory('STREAMING')" class="cat-pill px-3 py-1 rounded-full bg-gray-900 border border-gray-800 text-gray-400">OTT</button>
+        <button onclick="setCategory('AI')" class="cat-pill px-3 py-1 rounded-full bg-gray-900 border border-gray-800 text-gray-400">AI / Gemini</button>
+        <button onclick="setCategory('DESIGN')" class="cat-pill px-3 py-1 rounded-full bg-gray-900 border border-gray-800 text-gray-400">Tools</button>
+      </div>
+
+      <div id="productsGrid" class="grid grid-cols-1 gap-3">
+        <!-- Injected via JS -->
+      </div>
+    </div>
+
+    <!-- TAB: ORDERS -->
+    <div id="tabOrders" class="hidden">
+      <div class="flex items-center justify-between mb-3">
+        <h2 class="text-sm font-bold text-gray-100 flex items-center">
+          <i class="fa-solid fa-receipt text-purple-400 mr-2"></i> My Order History
+        </h2>
+        <button onclick="renderOrders()" class="text-xs text-purple-400 font-semibold hover:underline">
+          <i class="fa-solid fa-rotate-right mr-1"></i> Refresh
+        </button>
+      </div>
+      <div id="ordersList" class="space-y-3">
+        <!-- Injected via JS -->
+      </div>
+    </div>
+
+    <!-- TAB: WALLET / UPI DEPOSIT -->
+    <div id="tabWallet" class="hidden">
+      <div class="glass-card rounded-3xl p-5 mb-4 relative overflow-hidden border border-purple-500/30">
+        <span class="text-[11px] font-semibold text-gray-400 uppercase tracking-wider block">Wallet Balance</span>
+        <h1 id="walletBalanceMain" class="text-3xl font-black text-white mt-1">₹0.00</h1>
+        <p class="text-[10px] text-emerald-400 mt-1.5 flex items-center font-medium">
+          <i class="fa-solid fa-bolt mr-1"></i> Instant UPI QR Verification Active
+        </p>
+      </div>
+
+      <!-- Add Balance Form -->
+      <div class="glass-card rounded-3xl p-5 border border-gray-800">
+        <h3 class="text-xs font-bold text-gray-200 mb-2.5 flex items-center">
+          <i class="fa-solid fa-qrcode text-indigo-400 mr-2"></i> Add Funds via UPI QR
+        </h3>
+        
+        <div class="grid grid-cols-3 gap-2 mb-3">
+          <button onclick="setDepositAmt(50)" class="py-2 rounded-xl bg-gray-900 border border-gray-800 text-xs font-bold hover:border-purple-500">₹50</button>
+          <button onclick="setDepositAmt(100)" class="py-2 rounded-xl bg-gray-900 border border-gray-800 text-xs font-bold hover:border-purple-500">₹100</button>
+          <button onclick="setDepositAmt(300)" class="py-2 rounded-xl bg-gray-900 border border-gray-800 text-xs font-bold hover:border-purple-500">₹300</button>
+        </div>
+
+        <div class="relative mb-3">
+          <span class="absolute left-4 top-2.5 font-bold text-gray-500 text-sm">₹</span>
+          <input id="depositAmountInput" type="number" min="1" max="10000" placeholder="Enter amount (Min ₹1)" 
+                 class="w-full pl-9 pr-4 py-2 rounded-xl bg-gray-900 border border-gray-800 text-xs focus:border-purple-500 focus:outline-none">
+        </div>
+
+        <button onclick="generateUPI()" class="w-full py-3 rounded-xl font-bold text-xs bg-gradient-to-r from-indigo-500 to-purple-600 hover:opacity-90 active:scale-[0.98] transition shadow">
+          Generate Dynamic UPI QR
+        </button>
+      </div>
+    </div>
+
+    <!-- TAB: REFERRAL -->
+    <div id="tabRefer" class="hidden">
+      <div class="glass-card rounded-3xl p-6 text-center border border-amber-500/30">
+        <div class="w-12 h-12 mx-auto mb-2 rounded-2xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400 text-xl">
+          <i class="fa-solid fa-gift"></i>
+        </div>
+        <h2 class="text-base font-black text-white">Refer & Earn ₹5</h2>
+        <p class="text-xs text-gray-400 mt-0.5 max-w-xs mx-auto">Get ₹5 credited directly into your wallet on every friend's first completed purchase.</p>
+        
+        <div class="grid grid-cols-2 gap-3 mt-4">
+          <div class="p-3 bg-gray-900 rounded-2xl border border-gray-800">
+            <span class="text-[10px] text-gray-400 block">Invites</span>
+            <span id="refCount" class="text-base font-black text-white">0</span>
+          </div>
+          <div class="p-3 bg-gray-900 rounded-2xl border border-gray-800">
+            <span class="text-[10px] text-gray-400 block">Earned</span>
+            <span id="refEarned" class="text-base font-black text-amber-400">₹0.00</span>
+          </div>
+        </div>
+
+        <div class="mt-4">
+          <label class="text-[10px] text-gray-400 font-medium block mb-1">Your Referral Link</label>
+          <div class="flex items-center space-x-2">
+            <input id="refLinkInput" readonly class="w-full px-3 py-2 text-xs bg-gray-900 rounded-xl border border-gray-800 text-gray-300 font-mono">
+            <button onclick="copyRefLink()" class="px-3.5 py-2 rounded-xl bg-purple-600 text-xs font-bold active:scale-95 transition">
+              <i class="fa-solid fa-copy"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: ADMIN PANEL -->
+    <div id="tabAdmin" class="hidden">
+      <div class="glass-card rounded-3xl p-5 border border-amber-500/40 mb-4">
+        <div class="flex items-center justify-between pb-3 border-b border-gray-800 mb-3">
+          <h2 class="text-sm font-black text-amber-400 flex items-center">
+            <i class="fa-solid fa-shield-halved mr-2"></i> Admin Management Center
+          </h2>
+          <span class="text-[10px] bg-amber-950 text-amber-300 px-2 py-0.5 rounded-full border border-amber-800">Master</span>
+        </div>
+
+        <!-- Add Product Form -->
+        <h3 class="text-xs font-bold text-gray-200 mb-2">➕ Add New OTT Service</h3>
+        <form onsubmit="adminAddProduct(event)" class="space-y-2.5 mb-5">
+          <input id="admName" required placeholder="Service Name (e.g. Netflix 1 Month)" class="w-full px-3 py-2 text-xs bg-gray-900 rounded-xl border border-gray-800">
+          <div class="grid grid-cols-2 gap-2">
+            <input id="admPrice" type="number" step="0.1" required placeholder="Selling Price (₹)" class="w-full px-3 py-2 text-xs bg-gray-900 rounded-xl border border-gray-800">
+            <input id="admStock" type="number" required placeholder="Stock Qty (or 9999)" class="w-full px-3 py-2 text-xs bg-gray-900 rounded-xl border border-gray-800">
+          </div>
+          <div class="grid grid-cols-2 gap-2">
+            <input id="admWarranty" placeholder="Warranty (e.g. 1 Month)" class="w-full px-3 py-2 text-xs bg-gray-900 rounded-xl border border-gray-800">
+            <select id="admCategory" class="w-full px-3 py-2 text-xs bg-gray-900 rounded-xl border border-gray-800 text-gray-300">
+              <option value="STREAMING">OTT Streaming</option>
+              <option value="AI">AI Tools</option>
+              <option value="DESIGN">Design Tools</option>
+            </select>
+          </div>
+          <textarea id="admDesc" placeholder="Activation instructions / description" rows="2" class="w-full px-3 py-2 text-xs bg-gray-900 rounded-xl border border-gray-800"></textarea>
+          <button type="submit" class="w-full py-2.5 rounded-xl bg-indigo-600 text-xs font-bold hover:bg-indigo-500">
+            Publish Service
+          </button>
+        </form>
+
+        <!-- Admin Balance Adjuster -->
+        <h3 class="text-xs font-bold text-gray-200 mb-2">💰 Credit User Wallet</h3>
+        <div class="flex items-center space-x-2">
+          <input id="admTargetUser" placeholder="Username" class="w-1/2 px-3 py-2 text-xs bg-gray-900 rounded-xl border border-gray-800">
+          <input id="admTargetAmt" type="number" placeholder="₹ Amount" class="w-1/3 px-3 py-2 text-xs bg-gray-900 rounded-xl border border-gray-800">
+          <button onclick="adminCreditWallet()" class="w-1/4 py-2 rounded-xl bg-emerald-600 text-xs font-bold">Credit</button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ======================== 5. BOTTOM NAVIGATION BAR ======================== -->
+  <nav class="fixed bottom-0 left-0 right-0 z-30 glass-nav px-6 py-2 flex items-center justify-around">
+    <button onclick="switchTab('store')" id="navStore" class="nav-btn flex flex-col items-center text-purple-400 font-semibold text-[10px] active:scale-95 transition">
+      <i class="fa-solid fa-bag-shopping text-base mb-0.5"></i>
+      <span>Store</span>
+    </button>
+    <button onclick="switchTab('orders')" id="navOrders" class="nav-btn flex flex-col items-center text-gray-400 font-medium text-[10px] active:scale-95 transition">
+      <i class="fa-solid fa-receipt text-base mb-0.5"></i>
+      <span>Orders</span>
+    </button>
+    <button onclick="switchTab('wallet')" id="navWallet" class="nav-btn flex flex-col items-center text-gray-400 font-medium text-[10px] active:scale-95 transition">
+      <i class="fa-solid fa-wallet text-base mb-0.5"></i>
+      <span>Deposit</span>
+    </button>
+    <button onclick="switchTab('refer')" id="navRefer" class="nav-btn flex flex-col items-center text-gray-400 font-medium text-[10px] active:scale-95 transition">
+      <i class="fa-solid fa-users text-base mb-0.5"></i>
+      <span>Refer</span>
+    </button>
+  </nav>
+
+  <!-- ======================== 6. MODALS ======================== -->
+  
+  <!-- MODAL: BUY PRODUCT -->
+  <div id="buyModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+    <div class="w-full max-w-md bg-[#0e1422] rounded-t-3xl sm:rounded-3xl p-6 border border-purple-500/20 max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between pb-3 border-b border-gray-800 mb-4">
+        <h3 id="modalProdTitle" class="font-bold text-sm text-gray-100">Product Title</h3>
+        <button onclick="closeBuyModal()" class="w-7 h-7 rounded-full bg-gray-800 text-gray-400 hover:text-white flex items-center justify-center">
+          <i class="fa-solid fa-xmark text-xs"></i>
+        </button>
+      </div>
+
+      <div class="space-y-4">
+        <p id="modalProdDesc" class="text-xs text-gray-400 whitespace-pre-line leading-relaxed"></p>
+
+        <div class="flex items-center space-x-2 text-[10px]">
+          <span id="modalProdWarranty" class="px-2 py-0.5 rounded-md bg-blue-950/60 text-blue-300 border border-blue-800/40"></span>
+          <span id="modalProdStock" class="px-2 py-0.5 rounded-md bg-purple-950/60 text-purple-300 border border-purple-800/40"></span>
+        </div>
+
+        <div class="flex items-center justify-between p-3 rounded-2xl bg-gray-900 border border-gray-800">
+          <span class="text-xs font-semibold text-gray-300">Quantity</span>
+          <div class="flex items-center space-x-3">
+            <button onclick="changeQty(-1)" class="w-7 h-7 rounded-lg bg-gray-800 text-white font-bold">-</button>
+            <span id="modalQtyDisplay" class="text-xs font-bold text-purple-400">1</span>
+            <button onclick="changeQty(1)" class="w-7 h-7 rounded-lg bg-gray-800 text-white font-bold">+</button>
+          </div>
+        </div>
+
+        <div id="modalTargetInputGroup">
+          <label class="text-[11px] font-semibold text-gray-400 block mb-1">Target Email / Activation Details</label>
+          <input id="modalTargetLink" type="text" placeholder="example@gmail.com (if required)"
+                 class="w-full px-3 py-2 rounded-xl bg-gray-900 border border-gray-800 text-xs focus:border-purple-500 focus:outline-none">
+        </div>
+
+        <div class="flex items-center justify-between pt-2">
+          <span class="text-xs text-gray-400">Total Price:</span>
+          <span id="modalTotalPrice" class="text-lg font-black text-white">₹0.00</span>
+        </div>
+
+        <button onclick="submitOrder()" id="modalBuyBtn" class="w-full py-3 rounded-xl font-bold text-xs bg-gradient-to-r from-indigo-500 to-purple-600 hover:opacity-90 active:scale-[0.98] transition shadow">
+          Confirm & Pay From Wallet
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: DYNAMIC UPI QR -->
+  <div id="upiModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="w-full max-w-xs bg-[#0e1422] rounded-3xl p-5 text-center border border-purple-500/30">
+      <h3 class="font-bold text-xs text-gray-100">Scan & Pay via UPI</h3>
+      <p id="upiModalAmount" class="text-2xl font-black text-purple-400 my-1">₹100.00</p>
+      <p class="text-[10px] text-gray-500 mb-3">Ref: <span id="upiModalTxn" class="font-mono text-gray-400"></span></p>
+
+      <div class="p-2.5 bg-white rounded-2xl inline-block mb-3">
+        <img id="upiModalQR" src="" alt="UPI QR" class="w-40 h-40 mx-auto object-contain">
+      </div>
+
+      <div class="space-y-2">
+        <button onclick="verifyUPIPayment()" id="verifyUpiBtn" class="w-full py-2.5 rounded-xl font-bold text-xs bg-emerald-600 hover:bg-emerald-500 text-white transition">
+          <i class="fa-solid fa-check-circle mr-1"></i> I Have Paid (Auto-Verify)
+        </button>
+        <button onclick="closeUpiModal()" class="w-full py-2 rounded-xl text-xs bg-gray-800 text-gray-400">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: RULES / WARRANTY -->
+  <div id="rulesModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="w-full max-w-md bg-[#0e1422] rounded-3xl p-5 border border-blue-500/30">
+      <h3 class="font-bold text-sm text-gray-100 mb-2 flex items-center">
+        <i class="fa-solid fa-shield-halved text-blue-400 mr-2"></i> Aurakart Terms & Rules
+      </h3>
+      <div class="text-[11px] text-gray-300 whitespace-pre-line leading-relaxed p-3 bg-gray-900 rounded-2xl border border-gray-800 mb-3">
+🛡️ AURAKART WARRANTY & TERMS 🛡️
+
+⚡ Instant Activation:
+• Most services activate immediately on your account.
+• Check individual product descriptions for specific warranty periods.
+
+⚠️ IMPORTANT NOTICE:
+• Follow activation instructions carefully.
+• Products once claimed or activated according to terms cannot be replaced if account rules are breached.
+
+🎯 Guarantee Policy:
+• Replacement or refund is guaranteed if credentials fail on initial delivery.
+• No warranty is available after misuse or unauthorized plan manipulation.
+
+🎧 Need help? Contact 24/7 Support.
+      </div>
+      <button onclick="closeRulesModal()" class="w-full py-2 rounded-xl bg-gray-800 text-xs font-bold text-gray-200">
+        Close
+      </button>
+    </div>
+  </div>
+
+  <!-- ======================== 7. JAVASCRIPT LOGIC ======================== -->
+  <script>
+    // --- LOCAL STORAGE DATA SEED (FOR FULL SELF-CONTAINED OPERATION) ---
+    const DEFAULT_PRODUCTS = [
+      {
+        id: 1,
+        name: "Spotify Premium 3 Months",
+        description: "⚡ Instant Delivery\n1. Open activation link in browser\n2. Select your email & complete\n✅ 3 Months ad-free streaming",
+        price: 99.00,
+        stock: 50,
+        is_unlimited: false,
+        warranty: "3 Months",
+        category: "STREAMING",
+        service_type: "Link"
+      },
+      {
+        id: 2,
+        name: "Canva Pro Invite 1 Month",
+        description: "⚡ Instant Invite to your email.\nFull premium features unlocked including Brand Kit & AI tools.",
+        price: 39.00,
+        stock: 100,
+        is_unlimited: false,
+        warranty: "1 Month",
+        category: "DESIGN",
+        service_type: "Invite"
+      },
+      {
+        id: 3,
+        name: "Google Gemini Advanced Pro",
+        description: "⚡ Instant Delivery\nActivates 2TB cloud storage & Google Gemini 1.5 Pro AI model.",
+        price: 149.00,
+        stock: 9999,
+        is_unlimited: true,
+        warranty: "Full Plan Duration",
+        category: "AI",
+        service_type: "Account"
+      }
+    ];
+
+    // App State
+    let currentUser = null;
+    let products = JSON.parse(localStorage.getItem("aurakart_products")) || DEFAULT_PRODUCTS;
+    let orders = JSON.parse(localStorage.getItem("aurakart_orders")) || [];
+    let users = JSON.parse(localStorage.getItem("aurakart_users")) || {
+      "admin": { username: "admin", password: "123", balance: 5000.0, referrals: 0, earned: 0.0, role: "admin" }
+    };
+
+    let selectedProduct = null;
+    let selectedQty = 1;
+    let activeUPI = null;
+    let currentCategory = "ALL";
+
+    // Telegram Haptics
+    function haptic() {
+      if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.HapticFeedback) {
+        window.Telegram.WebApp.HapticFeedback.impactOccurred('medium');
+      }
+    }
+
+    // Init
+    window.addEventListener('DOMContentLoaded', () => {
+      if (window.Telegram && window.Telegram.WebApp) {
+        window.Telegram.WebApp.ready();
+        window.Telegram.WebApp.expand();
+      }
+
+      // Check stored session
+      const savedUser = localStorage.getItem("current_user_session");
+      if (savedUser && users[savedUser]) {
+        currentUser = users[savedUser];
+        onAuthSuccess();
+      }
+    });
+
+    function autoFillTelegramUser() {
+      if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe && window.Telegram.WebApp.initDataUnsafe.user) {
+        const u = window.Telegram.WebApp.initDataUnsafe.user;
+        document.getElementById('authUsername').value = u.username || `tg_${u.id}`;
+        document.getElementById('authPassword').value = `tg_${u.id}`;
+      } else {
+        document.getElementById('authUsername').value = "user1";
+        document.getElementById('authPassword').value = "pass123";
+      }
+    }
+
+    // Auth Handler (Login & Auto-Register)
+    function handleAuth(e) {
+      e.preventDefault();
+      const u = document.getElementById('authUsername').value.trim().toLowerCase();
+      const p = document.getElementById('authPassword').value.trim();
+      const err = document.getElementById('authError');
+      err.classList.add('hidden');
+
+      if (!users[u]) {
+        // Register new user
+        users[u] = {
+          username: u,
+          password: p,
+          balance: 0.0,
+          referrals: 0,
+          earned: 0.0,
+          role: u === "admin" ? "admin" : "user"
+        };
+        saveUsers();
+      } else {
+        if (users[u].password !== p) {
+          err.innerText = "❌ Incorrect password!";
+          err.classList.remove('hidden');
+          return;
+        }
+      }
+
+      currentUser = users[u];
+      localStorage.setItem("current_user_session", u);
+      onAuthSuccess();
+    }
+
+    function onAuthSuccess() {
+      document.getElementById('authScreen').classList.add('opacity-0', 'pointer-events-none');
+      document.getElementById('drawerName').innerText = currentUser.username;
+      document.getElementById('drawerUsername').innerText = `@${currentUser.username}`;
+      document.getElementById('drawerAvatar').innerText = currentUser.username[0].toUpperCase();
+      document.getElementById('refLinkInput').value = `https://t.me/AurakartBot?start=ref_${currentUser.username}`;
+      
+      if (currentUser.role === "admin") {
+        document.getElementById('adminDrawerBtn').classList.remove('hidden');
+      }
+
+      updateUI();
+      renderProducts();
+      renderOrders();
+    }
+
+    function handleLogout() {
+      localStorage.removeItem("current_user_session");
+      location.reload();
+    }
+
+    function saveUsers() {
+      localStorage.setItem("aurakart_users", JSON.stringify(users));
+    }
+
+    function updateUI() {
+      if (!currentUser) return;
+      document.getElementById('headerBalance').innerText = `₹${currentUser.balance.toFixed(2)}`;
+      document.getElementById('walletBalanceMain').innerText = `₹${currentUser.balance.toFixed(2)}`;
+      document.getElementById('refCount').innerText = currentUser.referrals || 0;
+      document.getElementById('refEarned').innerText = `₹${(currentUser.earned || 0).toFixed(2)}`;
+    }
+
+    // Drawer
+    function openDrawer() {
+      haptic();
+      document.getElementById('sideDrawer').classList.remove('hidden');
+      setTimeout(() => { document.getElementById('drawerContent').classList.remove('-translate-x-full'); }, 10);
+    }
+    function closeDrawer() {
+      document.getElementById('drawerContent').classList.add('-translate-x-full');
+      setTimeout(() => { document.getElementById('sideDrawer').classList.add('hidden'); }, 300);
+    }
+    document.getElementById('sideDrawer').addEventListener('click', (e) => {
+      if (e.target.id === 'sideDrawer') closeDrawer();
+    });
+    function drawerNav(tab) {
+      closeDrawer();
+      switchTab(tab);
+    }
+
+    // Navigation Tabs
+    function switchTab(tab) {
+      haptic();
+      ['store', 'orders', 'wallet', 'refer', 'admin'].forEach(t => {
+        const el = document.getElementById(`tab${t.charAt(0).toUpperCase() + t.slice(1)}`);
+        const nav = document.getElementById(`nav${t.charAt(0).toUpperCase() + t.slice(1)}`);
+        if (el) el.classList.add('hidden');
+        if (nav) {
+          nav.classList.remove('text-purple-400');
+          nav.classList.add('text-gray-400');
+        }
+      });
+
+      const activeTabEl = document.getElementById(`tab${tab.charAt(0).toUpperCase() + tab.slice(1)}`);
+      const activeNavEl = document.getElementById(`nav${tab.charAt(0).toUpperCase() + tab.slice(1)}`);
+      if (activeTabEl) activeTabEl.classList.remove('hidden');
+      if (activeNavEl) {
+        activeNavEl.classList.add('text-purple-400');
+        activeNavEl.classList.remove('text-gray-400');
+      }
+    }
+
+    // Catalog & Categories
+    function setCategory(cat) {
+      currentCategory = cat;
+      document.querySelectorAll('.cat-pill').forEach(btn => {
+        btn.classList.remove('bg-purple-600', 'text-white');
+        btn.classList.add('bg-gray-900', 'text-gray-400');
+      });
+      event.target.classList.add('bg-purple-600', 'text-white');
+      event.target.classList.remove('bg-gray-900', 'text-gray-400');
+      renderProducts();
+    }
+
+    function renderProducts() {
+      const q = document.getElementById('searchQuery').value.toLowerCase();
+      const grid = document.getElementById('productsGrid');
+      grid.innerHTML = '';
+
+      const filtered = products.filter(p => {
+        const catMatch = currentCategory === 'ALL' || p.category === currentCategory;
+        const qMatch = p.name.toLowerCase().includes(q) || p.description.toLowerCase().includes(q);
+        return catMatch && qMatch;
+      });
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `<div class="text-center text-gray-500 text-xs py-8">No products found.</div>`;
+        return;
+      }
+
+      filtered.forEach(p => {
+        const stockText = p.is_unlimited ? '♾️ Unlimited' : `📦 ${p.stock} in stock`;
+        grid.innerHTML += `
+          <div onclick="openBuyModal(${p.id})" class="glass-card rounded-2xl p-4 border border-gray-800 hover:border-purple-500/40 active:scale-[0.99] transition cursor-pointer flex items-center justify-between">
+            <div class="pr-3">
+              <h4 class="font-bold text-sm text-gray-100">${p.name}</h4>
+              <p class="text-[11px] text-gray-400 line-clamp-1 mt-0.5">${p.description}</p>
+              <div class="flex items-center space-x-2 mt-2 text-[10px]">
+                <span class="px-2 py-0.5 rounded-md bg-purple-950/60 text-purple-300 font-semibold">${stockText}</span>
+                <span class="px-2 py-0.5 rounded-md bg-indigo-950/60 text-indigo-300 font-semibold">${p.warranty}</span>
+              </div>
+            </div>
+            <div class="text-right">
+              <span class="text-base font-black text-white">₹${p.price.toFixed(2)}</span>
+              <button class="mt-2 w-7 h-7 rounded-lg bg-purple-600 text-white flex items-center justify-center text-xs">
+                <i class="fa-solid fa-arrow-right"></i>
+              </button>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    // Modal Buy
+    function openBuyModal(id) {
+      haptic();
+      selectedProduct = products.find(p => p.id === id);
+      if (!selectedProduct) return;
+      selectedQty = 1;
+
+      document.getElementById('modalProdTitle').innerText = selectedProduct.name;
+      document.getElementById('modalProdDesc').innerText = selectedProduct.description;
+      document.getElementById('modalProdWarranty').innerText = `🛡️ ${selectedProduct.warranty}`;
+      document.getElementById('modalProdStock').innerText = selectedProduct.is_unlimited ? '♾️ Unlimited' : `Stock: ${selectedProduct.stock}`;
+      document.getElementById('modalQtyDisplay').innerText = selectedQty;
+      updateTotalPrice();
+
+      const targetGroup = document.getElementById('modalTargetInputGroup');
+      if (selectedProduct.service_type === "Invite") {
+        targetGroup.classList.remove('hidden');
+      } else {
+        targetGroup.classList.add('hidden');
+      }
+
+      document.getElementById('buyModal').classList.remove('hidden');
+    }
+
+    function closeBuyModal() {
+      document.getElementById('buyModal').classList.add('hidden');
+    }
+
+    function changeQty(delta) {
+      selectedQty = Math.max(1, selectedQty + delta);
+      document.getElementById('modalQtyDisplay').innerText = selectedQty;
+      updateTotalPrice();
+    }
+
+    function updateTotalPrice() {
+      const tot = (selectedProduct.price * selectedQty).toFixed(2);
+      document.getElementById('modalTotalPrice').innerText = `₹${tot}`;
+    }
+
+    function submitOrder() {
+      haptic();
+      const total = selectedProduct.price * selectedQty;
+      if (currentUser.balance < total) {
+        alert(`⚠️ Insufficient Balance! Required: ₹${total.toFixed(2)}, Available: ₹${currentUser.balance.toFixed(2)}. Please add balance via UPI first.`);
+        closeBuyModal();
+        switchTab('wallet');
+        return;
+      }
+
+      // Deduct balance
+      currentUser.balance -= total;
+      saveUsers();
+
+      // Mock delivery credentials
+      const creds = `USER: aura_${Math.floor(1000 + Math.random()*9000)}@aurakart.in | PASS: AURA#${Math.floor(100000 + Math.random()*900000)}`;
+
+      const newOrder = {
+        order_id: `ORD-${1000 + orders.length + 1}`,
+        username: currentUser.username,
+        product_name: selectedProduct.name,
+        quantity: selectedQty,
+        total_amount: total,
+        status: "Completed",
+        delivery_data: creds,
+        created_at: new Date().toLocaleString()
+      };
+
+      orders.unshift(newOrder);
+      localStorage.setItem("aurakart_orders", JSON.stringify(orders));
+
+      alert(`🎉 Order ${newOrder.order_id} Successful! Credentials have been delivered to your Orders tab.`);
+      closeBuyModal();
+      updateUI();
+      renderOrders();
+      switchTab('orders');
+    }
+
+    // Render Orders
+    function renderOrders() {
+      const list = document.getElementById('ordersList');
+      list.innerHTML = '';
+
+      const userOrders = orders.filter(o => o.username === currentUser.username);
+      if (userOrders.length === 0) {
+        list.innerHTML = `<div class="text-center text-gray-500 text-xs py-8">You haven't placed any orders yet.</div>`;
+        return;
+      }
+
+      userOrders.forEach(o => {
+        list.innerHTML += `
+          <div class="glass-card rounded-2xl p-4 border border-gray-800">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-mono text-purple-400 font-bold">#${o.order_id}</span>
+              <span class="text-[10px] px-2 py-0.5 rounded-full border border-emerald-800 bg-emerald-950/50 text-emerald-400 font-bold">${o.status}</span>
+            </div>
+            <h4 class="font-bold text-xs text-gray-200 mt-1">${o.product_name} x${o.quantity}</h4>
+            <div class="flex items-center justify-between text-[11px] text-gray-400 mt-1">
+              <span>₹${o.total_amount.toFixed(2)}</span>
+              <span class="text-[10px] text-gray-500">${o.created_at}</span>
+            </div>
+            ${o.delivery_data ? `
+              <div class="mt-2.5 p-2 bg-gray-950 rounded-xl border border-purple-500/30 flex items-center justify-between">
+                <span class="text-[10px] font-mono text-purple-300 select-all break-all">${o.delivery_data}</span>
+                <button onclick="navigator.clipboard.writeText('${o.delivery_data}'); alert('Copied!');" class="ml-2 text-xs text-purple-400">
+                  <i class="fa-solid fa-copy"></i>
+                </button>
+              </div>
+            ` : ''}
+          </div>
+        `;
+      });
+    }
+
+    // UPI Deposit Flow
+    function setDepositAmt(val) {
+      document.getElementById('depositAmountInput').value = val;
+    }
+
+    function generateUPI() {
+      const amt = parseFloat(document.getElementById('depositAmountInput').value);
+      if (!amt || amt < 1) {
+        alert("Please enter a valid amount (Minimum ₹1)");
+        return;
+      }
+
+      const upiId = "luckyshrivastav01@fam";
+      const payeeName = encodeURIComponent("AURAKART");
+      const txnRef = `PAY${Math.floor(10000000 + Math.random() * 90000000)}`;
+      const upiUri = `upi://pay?pa=${upiId}&pn=${payeeName}&tn=${txnRef}&am=${amt.toFixed(2)}`;
+      const qrUrl = `https://quickchart.io/qr?text=${encodeURIComponent(upiUri)}&size=600`;
+
+      activeUPI = { txnRef, amt };
+
+      document.getElementById('upiModalAmount').innerText = `₹${amt.toFixed(2)}`;
+      document.getElementById('upiModalTxn').innerText = txnRef;
+      document.getElementById('upiModalQR').src = qrUrl;
+      document.getElementById('upiModal').classList.remove('hidden');
+    }
+
+    function closeUpiModal() {
+      document.getElementById('upiModal').classList.add('hidden');
+    }
+
+    function verifyUPIPayment() {
+      if (!activeUPI) return;
+      const btn = document.getElementById('verifyUpiBtn');
+      btn.innerText = "Verifying with Gateway...";
+      btn.disabled = true;
+
+      // Simulate verification / In live setup connects to FamPay webhook
+      setTimeout(() => {
+        currentUser.balance += activeUPI.amt;
+        saveUsers();
+        alert(`🎉 Payment Verified! ₹${activeUPI.amt.toFixed(2)} has been credited to your wallet.`);
+        btn.innerText = "I Have Paid (Auto-Verify)";
+        btn.disabled = false;
+        closeUpiModal();
+        updateUI();
+      }, 1500);
+    }
+
+    // Modals (Gift & Rules)
+    function openGiftModal() {
+      closeDrawer();
+      const code = prompt("🎟️ Enter Gift Code (Try 'AURA50'):");
+      if (!code) return;
+
+      if (code.toUpperCase() === "AURA50") {
+        currentUser.balance += 50.0;
+        saveUsers();
+        updateUI();
+        alert("🎉 ₹50 Gift Voucher successfully redeemed!");
+      } else {
+        alert("❌ Invalid or expired gift voucher.");
+      }
+    }
+
+    function openRulesModal() {
+      closeDrawer();
+      document.getElementById('rulesModal').classList.remove('hidden');
+    }
+    function closeRulesModal() {
+      document.getElementById('rulesModal').classList.add('hidden');
+    }
+
+    function openSupportLink() {
+      closeDrawer();
+      window.open('https://t.me/LuckyXowner', '_blank');
+    }
+
+    function copyRefLink() {
+      const input = document.getElementById('refLinkInput');
+      input.select();
+      navigator.clipboard.writeText(input.value);
+      alert("Referral link copied!");
+    }
+
+    // Admin Panel Methods
+    function adminAddProduct(e) {
+      e.preventDefault();
+      const name = document.getElementById('admName').value;
+      const price = parseFloat(document.getElementById('admPrice').value);
+      const stock = parseInt(document.getElementById('admStock').value);
+      const warranty = document.getElementById('admWarranty').value || "Standard";
+      const category = document.getElementById('admCategory').value;
+      const desc = document.getElementById('admDesc').value;
+
+      const newProd = {
+        id: products.length + 1,
+        name,
+        description: desc,
+        price,
+        stock,
+        is_unlimited: stock >= 5000,
+        warranty,
+        category,
+        service_type: "Standard"
+      };
+
+      products.push(newProd);
+      localStorage.setItem("aurakart_products", JSON.stringify(products));
+      alert(`✅ Product '${name}' published!`);
+      renderProducts();
+      switchTab('store');
+    }
+
+    function adminCreditWallet() {
+      const u = document.getElementById('admTargetUser').value.trim().toLowerCase();
+      const amt = parseFloat(document.getElementById('admTargetAmt').value);
+      if (!users[u]) {
+        alert("❌ User not found!");
+        return;
+      }
+      if (!amt || amt <= 0) {
+        alert("❌ Enter valid amount!");
+        return;
+      }
+
+      users[u].balance += amt;
+      saveUsers();
+      if (currentUser.username === u) updateUI();
+      alert(`✅ Credited ₹${amt.toFixed(2)} to @${u}!`);
+    }
+  </script>
+</body>
+</html>
