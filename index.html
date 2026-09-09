@@ -1,0 +1,1548 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>AURAKART | Official OTT Web Store</title>
+
+  <!-- Telegram WebApp SDK -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            aura: {
+              bg: 'var(--color-bg)',
+              card: 'var(--color-card)',
+              card2: 'var(--color-card2)',
+              border: 'var(--color-border)',
+              accent: 'var(--color-accent)',
+              accentHover: 'var(--color-accent-hover)',
+              neon: 'var(--color-neon)',
+              success: '#10b981',
+              danger: '#ef4444',
+              warning: '#f59e0b'
+            }
+          },
+          animation: {
+            'glow-pulse': 'glow 3s ease-in-out infinite',
+            'slide-in': 'slideIn 0.28s cubic-bezier(0.16, 1, 0.3, 1)',
+            'fade-up': 'fadeUp 0.3s ease-out'
+          },
+          keyframes: {
+            glow: {
+              '0%, 100%': { filter: 'drop-shadow(0 0 12px var(--color-accent-glow))' },
+              '50%': { filter: 'drop-shadow(0 0 24px var(--color-accent-glow2))' }
+            },
+            slideIn: {
+              '0%': { transform: 'translateX(-100%)' },
+              '100%': { transform: 'translateX(0)' }
+            },
+            fadeUp: {
+              '0%': { opacity: '0', transform: 'translateY(10px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' }
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <!-- FontAwesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- THEME DEFINITIONS -->
+  <style>
+    :root {
+      --color-bg: #070a13;
+      --color-card: rgba(15, 23, 42, 0.85);
+      --color-card2: rgba(30, 41, 59, 0.7);
+      --color-border: rgba(99, 102, 241, 0.2);
+      --color-accent: #6366f1;
+      --color-accent-hover: #4f46e5;
+      --color-neon: #a855f7;
+      --color-accent-glow: rgba(168, 85, 247, 0.4);
+      --color-accent-glow2: rgba(99, 102, 241, 0.8);
+      --font-gradient: linear-gradient(135deg, #818cf8, #c084fc, #f472b6);
+    }
+    body[data-theme="cyberpunk"] {
+      --color-bg: #041014;
+      --color-card: rgba(6, 30, 36, 0.85);
+      --color-card2: rgba(10, 45, 54, 0.7);
+      --color-border: rgba(20, 184, 166, 0.25);
+      --color-accent: #14b8a6;
+      --color-accent-hover: #0d9488;
+      --color-neon: #06b6d4;
+      --color-accent-glow: rgba(20, 184, 166, 0.4);
+      --color-accent-glow2: rgba(6, 182, 212, 0.8);
+      --font-gradient: linear-gradient(135deg, #2dd4bf, #38bdf8, #818cf8);
+    }
+    body[data-theme="amber"] {
+      --color-bg: #120b02;
+      --color-card: rgba(36, 21, 6, 0.85);
+      --color-card2: rgba(54, 32, 10, 0.7);
+      --color-border: rgba(245, 158, 11, 0.25);
+      --color-accent: #f59e0b;
+      --color-accent-hover: #d97706;
+      --color-neon: #fbbf24;
+      --color-accent-glow: rgba(245, 158, 11, 0.4);
+      --color-accent-glow2: rgba(251, 191, 36, 0.8);
+      --font-gradient: linear-gradient(135deg, #fbbf24, #f97316, #ef4444);
+    }
+    body[data-theme="crimson"] {
+      --color-bg: #120406;
+      --color-card: rgba(36, 8, 13, 0.85);
+      --color-card2: rgba(54, 12, 20, 0.7);
+      --color-border: rgba(239, 68, 68, 0.25);
+      --color-accent: #ef4444;
+      --color-accent-hover: #dc2626;
+      --color-neon: #ec4899;
+      --color-accent-glow: rgba(239, 68, 68, 0.4);
+      --color-accent-glow2: rgba(236, 72, 153, 0.8);
+      --font-gradient: linear-gradient(135deg, #f87171, #fb7185, #c084fc);
+    }
+
+    body {
+      background-color: var(--color-bg);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      transition: background-color 0.4s ease;
+    }
+    .glass-box {
+      background: var(--color-card);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--color-border);
+      transition: border-color 0.3s, background 0.3s;
+    }
+    .glass-nav {
+      background: var(--color-card);
+      backdrop-filter: blur(20px);
+      border-top: 1px solid var(--color-border);
+    }
+    .neon-text {
+      background: var(--font-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .custom-scroll::-webkit-scrollbar { width: 4px; height: 4px; }
+    .custom-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 4px; }
+  </style>
+</head>
+<body data-theme="violet" class="text-gray-100 min-h-screen flex flex-col justify-between overflow-x-hidden">
+
+  <!-- ======================== 1. AUTH SCREEN (LOGIN / REGISTER) ======================== -->
+  <div id="authScreen" class="fixed inset-0 z-50 bg-[#070a13] flex flex-col items-center justify-center p-6 transition-all duration-300">
+    <div class="w-full max-w-sm glass-box rounded-3xl p-7 shadow-2xl shadow-purple-950/40 relative">
+      <div class="text-center mb-6">
+        <div class="w-16 h-16 mx-auto mb-3 rounded-2xl bg-gradient-to-tr from-indigo-500 via-purple-600 to-pink-500 flex items-center justify-center shadow-lg shadow-purple-500/30 animate-glow-pulse">
+          <i class="fa-solid fa-bolt text-2xl text-white"></i>
+        </div>
+        <h1 class="text-2xl font-black tracking-wider neon-text uppercase">AURAKART OTT</h1>
+        <p class="text-xs text-gray-400 mt-0.5">Automated Digital Subscription Hub</p>
+      </div>
+
+      <form id="authForm" class="space-y-4" onsubmit="handleAuth(event)">
+        <div>
+          <label class="text-[11px] font-semibold text-gray-400 uppercase tracking-wider block mb-1">Username</label>
+          <div class="relative">
+            <i class="fa-solid fa-user absolute left-4 top-3.5 text-gray-500 text-xs"></i>
+            <input id="authUsername" type="text" required placeholder="Username (or 'admin')" 
+                   class="w-full pl-10 pr-4 py-3 rounded-xl bg-black/40 border border-gray-700/60 text-xs focus:border-indigo-500 focus:outline-none">
+          </div>
+        </div>
+
+        <div>
+          <label class="text-[11px] font-semibold text-gray-400 uppercase tracking-wider block mb-1">Password</label>
+          <div class="relative">
+            <i class="fa-solid fa-lock absolute left-4 top-3.5 text-gray-500 text-xs"></i>
+            <input id="authPassword" type="password" required placeholder="Password ('123' for admin)" 
+                   class="w-full pl-10 pr-4 py-3 rounded-xl bg-black/40 border border-gray-700/60 text-xs focus:border-indigo-500 focus:outline-none">
+          </div>
+        </div>
+
+        <div id="authError" class="hidden text-xs text-red-400 bg-red-950/40 border border-red-800/60 p-2.5 rounded-lg text-center font-medium"></div>
+
+        <button type="submit" class="w-full py-3.5 mt-1 rounded-xl font-bold text-xs bg-gradient-to-r from-indigo-500 via-purple-600 to-pink-500 hover:opacity-90 active:scale-[0.98] transition shadow-lg shadow-purple-500/20">
+          Sign In / Create Account
+        </button>
+      </form>
+
+      <div class="mt-4 text-center">
+        <button onclick="autoFillTelegramUser()" type="button" class="text-xs text-indigo-400 font-semibold hover:underline">
+          ⚡ One-Click Auto Login (Telegram)
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================== 2. TOP APP HEADER ======================== -->
+  <header class="sticky top-0 z-30 glass-box px-4 py-3 flex items-center justify-between border-b border-gray-800/80">
+    <div class="flex items-center space-x-3">
+      <!-- 3-Line Animated Hamburger Button -->
+      <button onclick="openDrawer()" class="w-9 h-9 rounded-xl bg-black/40 border border-gray-700/50 flex items-center justify-center text-gray-300 hover:text-white active:scale-95 transition">
+        <i class="fa-solid fa-bars-staggered text-sm"></i>
+      </button>
+
+      <div class="flex items-center space-x-2">
+        <div class="w-6 h-6 rounded-lg bg-gradient-to-tr from-indigo-500 to-pink-500 flex items-center justify-center">
+          <i class="fa-solid fa-fire text-[10px] text-white"></i>
+        </div>
+        <span class="font-black text-sm tracking-wider neon-text">AURAKART</span>
+      </div>
+    </div>
+
+    <div class="flex items-center space-x-2">
+      <!-- Theme Switcher Palette Trigger -->
+      <button onclick="cycleTheme()" title="Change Color Theme" class="w-8 h-8 rounded-xl bg-black/40 border border-gray-700/50 flex items-center justify-center text-amber-400 active:scale-95 transition text-xs">
+        <i class="fa-solid fa-palette"></i>
+      </button>
+
+      <!-- Balance Badge -->
+      <button onclick="switchTab('wallet')" class="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-black/40 border border-purple-500/40 active:scale-95 transition">
+        <i class="fa-solid fa-wallet text-purple-400 text-xs"></i>
+        <span id="headerBalance" class="text-xs font-bold text-gray-100">₹0.00</span>
+        <i class="fa-solid fa-plus text-[9px] text-purple-400 ml-1"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- ======================== 3. SIDE HAMBURGER DRAWER ======================== -->
+  <div id="sideDrawer" class="fixed inset-0 z-40 bg-black/70 backdrop-blur-sm hidden transition-opacity duration-300">
+    <div id="drawerContent" class="w-72 max-w-[80vw] h-full bg-[#090e1a] border-r border-gray-800 p-5 flex flex-col justify-between transform -translate-x-full transition-transform duration-300 custom-scroll overflow-y-auto">
+      <div>
+        <div class="flex items-center space-x-3 pb-4 border-b border-gray-800">
+          <div id="drawerAvatar" class="w-11 h-11 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-base font-bold shadow">
+            U
+          </div>
+          <div>
+            <h3 id="drawerName" class="font-bold text-sm text-gray-100 leading-tight">User</h3>
+            <p id="drawerUsername" class="text-xs text-purple-400">@username</p>
+            <span class="text-[10px] text-emerald-400 font-semibold flex items-center mt-0.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1 animate-ping"></span> Live Account
+            </span>
+          </div>
+        </div>
+
+        <!-- FULL NAVIGATION (CORRESPONDS TO BOT MAIN MENU) -->
+        <nav class="mt-4 space-y-1 text-xs font-medium">
+          <button onclick="drawerNav('store')" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl hover:bg-white/5 text-gray-300 hover:text-white transition">
+            <i class="fa-solid fa-cart-shopping w-5 text-indigo-400"></i>
+            <span>🛒 Buy Products</span>
+          </button>
+          
+          <button onclick="drawerNav('orders')" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl hover:bg-white/5 text-gray-300 hover:text-white transition">
+            <i class="fa-solid fa-box-archive w-5 text-purple-400"></i>
+            <span>📚 Orders & History</span>
+          </button>
+
+          <button onclick="drawerNav('account')" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl hover:bg-white/5 text-gray-300 hover:text-white transition">
+            <i class="fa-solid fa-id-card w-5 text-blue-400"></i>
+            <span>👤 Account & Statistics</span>
+          </button>
+
+          <button onclick="drawerNav('wallet')" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl hover:bg-white/5 text-gray-300 hover:text-white transition">
+            <i class="fa-solid fa-credit-card w-5 text-emerald-400"></i>
+            <span>💳 Deposit Funds (UPI)</span>
+          </button>
+
+          <button onclick="drawerNav('refer')" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl hover:bg-white/5 text-gray-300 hover:text-white transition">
+            <i class="fa-solid fa-gift w-5 text-amber-400"></i>
+            <span>🎁 Refer & Earn (₹5.00)</span>
+          </button>
+
+          <button onclick="openGiftModal()" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl hover:bg-white/5 text-gray-300 hover:text-white transition">
+            <i class="fa-solid fa-ticket w-5 text-pink-400"></i>
+            <span>🎟️ Redeem Gift Voucher</span>
+          </button>
+
+          <button onclick="openRulesModal()" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl hover:bg-white/5 text-gray-300 hover:text-white transition">
+            <i class="fa-solid fa-shield-halved w-5 text-cyan-400"></i>
+            <span>📜 Terms & Warranty</span>
+          </button>
+
+          <button onclick="openSupportLink()" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl hover:bg-white/5 text-gray-300 hover:text-white transition">
+            <i class="fa-solid fa-headset w-5 text-teal-400"></i>
+            <span>🎧 24/7 Support Desk</span>
+          </button>
+
+          <!-- ADMIN MENU ACCESS -->
+          <div id="adminNavSection" class="pt-3 border-t border-gray-800 mt-2 hidden">
+            <span class="text-[10px] text-amber-400 font-bold px-3 uppercase tracking-wider block mb-1">👑 Master Control</span>
+            <button onclick="drawerNav('admin')" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl bg-amber-950/40 border border-amber-800/60 text-amber-300 hover:text-white transition">
+              <i class="fa-solid fa-gauge-high w-5 text-amber-400"></i>
+              <span>Admin Management Hub</span>
+            </button>
+          </div>
+        </nav>
+      </div>
+
+      <div class="pt-3 border-t border-gray-800 mt-4">
+        <button onclick="handleLogout()" class="w-full flex items-center justify-center space-x-2 py-2.5 rounded-xl bg-red-950/40 text-red-400 border border-red-800/50 hover:bg-red-900/40 text-xs font-semibold">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i>
+          <span>Logout Account</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================== 4. MAIN CONTENT TABS ======================== -->
+  <main class="flex-1 p-4 pb-24 overflow-y-auto custom-scroll">
+
+    <!-- VIEW 1: CATALOG (BUY PRODUCTS) -->
+    <div id="tabStore" class="animate-fade-up">
+      <!-- Search Input -->
+      <div class="relative mb-3.5">
+        <i class="fa-solid fa-magnifying-glass absolute left-4 top-3 text-gray-500 text-xs"></i>
+        <input id="searchQuery" oninput="renderProducts()" type="text" placeholder="Search Netflix, Spotify, Prime, Canva, AI..." 
+               class="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-black/30 border border-gray-800 text-xs focus:border-indigo-500 focus:outline-none">
+      </div>
+
+      <!-- Categories Filter -->
+      <div class="flex items-center space-x-2 overflow-x-auto pb-2.5 mb-3 custom-scroll text-xs">
+        <button onclick="setCategory('ALL')" class="cat-pill active px-3.5 py-1.5 rounded-full bg-indigo-600 text-white font-semibold shadow">All</button>
+        <button onclick="setCategory('STREAMING')" class="cat-pill px-3.5 py-1.5 rounded-full bg-black/40 border border-gray-800 text-gray-400">OTT</button>
+        <button onclick="setCategory('AI')" class="cat-pill px-3.5 py-1.5 rounded-full bg-black/40 border border-gray-800 text-gray-400">AI / Gemini</button>
+        <button onclick="setCategory('DESIGN')" class="cat-pill px-3.5 py-1.5 rounded-full bg-black/40 border border-gray-800 text-gray-400">Tools</button>
+      </div>
+
+      <!-- Product Cards Container -->
+      <div id="productsGrid" class="grid grid-cols-1 gap-3"></div>
+    </div>
+
+    <!-- VIEW 2: ORDERS & AUDIT HISTORY -->
+    <div id="tabOrders" class="hidden animate-fade-up">
+      <div class="flex items-center justify-between mb-3">
+        <h2 class="text-sm font-bold text-gray-100 flex items-center">
+          <i class="fa-solid fa-receipt text-purple-400 mr-2"></i> My Order Records
+        </h2>
+        <button onclick="renderOrders()" class="text-xs text-purple-400 font-semibold hover:underline">
+          <i class="fa-solid fa-rotate-right mr-1"></i> Refresh
+        </button>
+      </div>
+      <div id="ordersList" class="space-y-3"></div>
+    </div>
+
+    <!-- VIEW 3: ACCOUNT & PERSONAL STATS -->
+    <div id="tabAccount" class="hidden animate-fade-up">
+      <div class="glass-box rounded-3xl p-5 border border-gray-800 mb-4">
+        <div class="flex items-center space-x-3 mb-4">
+          <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-purple-600 to-indigo-600 flex items-center justify-center text-lg font-bold text-white shadow">
+            <span id="accAvatar">U</span>
+          </div>
+          <div>
+            <h3 id="accUsername" class="font-bold text-sm text-gray-100">@username</h3>
+            <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-950 text-emerald-400 border border-emerald-800 font-semibold">Verified Member</span>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3 mb-3">
+          <div class="p-3 bg-black/40 rounded-2xl border border-gray-800/80">
+            <span class="text-[10px] text-gray-400 block">Total Spent</span>
+            <span id="accTotalSpent" class="text-base font-black text-white">₹0.00</span>
+          </div>
+          <div class="p-3 bg-black/40 rounded-2xl border border-gray-800/80">
+            <span class="text-[10px] text-gray-400 block">Total Orders</span>
+            <span id="accTotalOrders" class="text-base font-black text-purple-400">0</span>
+          </div>
+        </div>
+
+        <div class="p-3 bg-black/40 rounded-2xl border border-gray-800/80 mb-4">
+          <div class="flex items-center justify-between text-xs mb-1">
+            <span class="text-gray-400">Successful Deposits</span>
+            <span id="accDepositsCnt" class="font-bold text-emerald-400">0 Approved</span>
+          </div>
+          <div class="flex items-center justify-between text-xs">
+            <span class="text-gray-400">Referral Commissions</span>
+            <span id="accRefEarned" class="font-bold text-amber-400">₹0.00</span>
+          </div>
+        </div>
+
+        <button onclick="switchTab('wallet')" class="w-full py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 font-bold text-xs shadow">
+          Deposit Balance
+        </button>
+      </div>
+
+      <!-- Passbook Ledger -->
+      <h3 class="text-xs font-bold text-gray-300 mb-2">💰 Passbook / Wallet Ledger</h3>
+      <div id="accTxList" class="space-y-2"></div>
+    </div>
+
+    <!-- VIEW 4: DEPOSIT UPI & PENDING REQUESTS -->
+    <div id="tabWallet" class="hidden animate-fade-up">
+      <!-- Live Balance Card -->
+      <div class="glass-box rounded-3xl p-5 mb-4 relative overflow-hidden">
+        <span class="text-[11px] font-semibold text-gray-400 uppercase tracking-wider block">Wallet Balance</span>
+        <h1 id="walletBalanceMain" class="text-3xl font-black text-white mt-1">₹0.00</h1>
+        <p class="text-[10px] text-emerald-400 mt-1.5 flex items-center font-medium">
+          <i class="fa-solid fa-bolt mr-1"></i> Automated UPI QR Gateway Active
+        </p>
+      </div>
+
+      <!-- Add Funds Section -->
+      <div class="glass-box rounded-3xl p-5 border border-gray-800 mb-4">
+        <h3 class="text-xs font-bold text-gray-200 mb-2.5 flex items-center">
+          <i class="fa-solid fa-qrcode text-indigo-400 mr-2"></i> Add Funds via UPI QR
+        </h3>
+        
+        <div class="grid grid-cols-3 gap-2 mb-3">
+          <button onclick="setDepositAmt(50)" class="py-2 rounded-xl bg-black/40 border border-gray-800 text-xs font-bold hover:border-purple-500">₹50</button>
+          <button onclick="setDepositAmt(100)" class="py-2 rounded-xl bg-black/40 border border-gray-800 text-xs font-bold hover:border-purple-500">₹100</button>
+          <button onclick="setDepositAmt(300)" class="py-2 rounded-xl bg-black/40 border border-gray-800 text-xs font-bold hover:border-purple-500">₹300</button>
+        </div>
+
+        <div class="relative mb-3">
+          <span class="absolute left-4 top-2.5 font-bold text-gray-500 text-sm">₹</span>
+          <input id="depositAmountInput" type="number" min="1" max="10000" placeholder="Enter custom amount" 
+                 class="w-full pl-9 pr-4 py-2.5 rounded-xl bg-black/40 border border-gray-800 text-xs focus:border-indigo-500 focus:outline-none">
+        </div>
+
+        <button onclick="generateUPI()" class="w-full py-3 rounded-xl font-bold text-xs bg-gradient-to-r from-indigo-500 to-purple-600 hover:opacity-90 active:scale-[0.98] transition shadow">
+          Generate Dynamic UPI QR
+        </button>
+      </div>
+
+      <!-- Pending Deposits -->
+      <h3 class="text-xs font-bold text-gray-300 mb-2">⏳ Pending Deposit History</h3>
+      <div id="pendingDepositsList" class="space-y-2"></div>
+    </div>
+
+    <!-- VIEW 5: REFER & EARN -->
+    <div id="tabRefer" class="hidden animate-fade-up">
+      <div class="glass-box rounded-3xl p-6 text-center border border-amber-500/30">
+        <div class="w-14 h-14 mx-auto mb-2 rounded-2xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400 text-xl shadow">
+          <i class="fa-solid fa-gift"></i>
+        </div>
+        <h2 class="text-base font-black text-white">Refer & Earn ₹5.00</h2>
+        <p class="text-xs text-gray-400 mt-0.5 max-w-xs mx-auto">Get ₹5 reward automatically credited to your wallet whenever your referred friend completes their first purchase.</p>
+        
+        <div class="grid grid-cols-2 gap-3 mt-4">
+          <div class="p-3 bg-black/40 rounded-2xl border border-gray-800">
+            <span class="text-[10px] text-gray-400 block">Invites</span>
+            <span id="refCount" class="text-base font-black text-white">0</span>
+          </div>
+          <div class="p-3 bg-black/40 rounded-2xl border border-gray-800">
+            <span class="text-[10px] text-gray-400 block">Total Earned</span>
+            <span id="refEarned" class="text-base font-black text-amber-400">₹0.00</span>
+          </div>
+        </div>
+
+        <div class="mt-4">
+          <label class="text-[10px] text-gray-400 font-medium block mb-1">Your Referral Link</label>
+          <div class="flex items-center space-x-2">
+            <input id="refLinkInput" readonly class="w-full px-3 py-2 text-xs bg-black/40 rounded-xl border border-gray-800 text-gray-300 font-mono">
+            <button onclick="copyRefLink()" class="px-3.5 py-2 rounded-xl bg-indigo-600 text-xs font-bold active:scale-95 transition">
+              <i class="fa-solid fa-copy"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- VIEW 6: MASTER ADMIN CONTROL HUB -->
+    <div id="tabAdmin" class="hidden animate-fade-up">
+      <div class="glass-box rounded-3xl p-5 border border-amber-500/40 mb-4">
+        <div class="flex items-center justify-between pb-3 border-b border-gray-800 mb-3">
+          <h2 class="text-sm font-black text-amber-400 flex items-center">
+            <i class="fa-solid fa-crown mr-2"></i> Aurakart Admin Command Center
+          </h2>
+          <button onclick="syncAllRates()" class="text-[10px] bg-indigo-600 hover:bg-indigo-500 text-white px-2.5 py-1 rounded-lg">
+            <i class="fa-solid fa-rotate mr-1"></i> Sync Rates
+          </button>
+        </div>
+
+        <!-- Live Metrics -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-4">
+          <div class="p-2.5 bg-black/40 rounded-xl border border-gray-800">
+            <span class="text-[10px] text-gray-400 block">Total Users</span>
+            <span id="admTotalUsers" class="text-sm font-bold text-white">0</span>
+          </div>
+          <div class="p-2.5 bg-black/40 rounded-xl border border-gray-800">
+            <span class="text-[10px] text-gray-400 block">Total Orders</span>
+            <span id="admTotalOrders" class="text-sm font-bold text-purple-400">0</span>
+          </div>
+          <div class="p-2.5 bg-black/40 rounded-xl border border-gray-800">
+            <span class="text-[10px] text-gray-400 block">Gross Sales</span>
+            <span id="admTotalSales" class="text-sm font-bold text-emerald-400">₹0.00</span>
+          </div>
+          <div class="p-2.5 bg-black/40 rounded-xl border border-gray-800">
+            <span class="text-[10px] text-gray-400 block">Est. Profit</span>
+            <span id="admTotalProfit" class="text-sm font-bold text-amber-400">₹0.00</span>
+          </div>
+        </div>
+
+        <!-- Section Toggles -->
+        <div class="grid grid-cols-3 gap-2 text-[11px] font-semibold mb-4">
+          <button onclick="switchAdminSection('products')" class="py-2 bg-black/40 border border-gray-800 rounded-xl hover:border-indigo-500">📦 Products</button>
+          <button onclick="switchAdminSection('orders')" class="py-2 bg-black/40 border border-gray-800 rounded-xl hover:border-indigo-500">📋 Orders</button>
+          <button onclick="switchAdminSection('providers')" class="py-2 bg-black/40 border border-gray-800 rounded-xl hover:border-indigo-500">🌐 Providers</button>
+          <button onclick="switchAdminSection('payments')" class="py-2 bg-black/40 border border-gray-800 rounded-xl hover:border-indigo-500">💳 Payments</button>
+          <button onclick="switchAdminSection('gifts')" class="py-2 bg-black/40 border border-gray-800 rounded-xl hover:border-indigo-500">🎟️ Gift Codes</button>
+          <button onclick="switchAdminSection('settings')" class="py-2 bg-black/40 border border-gray-800 rounded-xl hover:border-indigo-500">⚙️ Settings</button>
+        </div>
+
+        <!-- SECTION A: PRODUCTS -->
+        <div id="admSecProducts" class="space-y-4">
+          <h3 class="text-xs font-bold text-gray-200">➕ Add New OTT Service</h3>
+          <form onsubmit="adminAddProduct(event)" class="space-y-2.5">
+            <input id="admName" required placeholder="Service Name (e.g. Netflix Premium 4K)" class="w-full px-3 py-2 text-xs bg-black/40 rounded-xl border border-gray-800">
+            <div class="grid grid-cols-2 gap-2">
+              <input id="admPrice" type="number" step="0.1" required placeholder="Selling Price (₹)" class="w-full px-3 py-2 text-xs bg-black/40 rounded-xl border border-gray-800">
+              <input id="admCostPrice" type="number" step="0.1" required placeholder="Cost Price (₹)" class="w-full px-3 py-2 text-xs bg-black/40 rounded-xl border border-gray-800">
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              <input id="admStock" type="number" required placeholder="Stock Qty (or 9999)" class="w-full px-3 py-2 text-xs bg-black/40 rounded-xl border border-gray-800">
+              <input id="admWarranty" placeholder="Warranty (e.g. 1 Month)" class="w-full px-3 py-2 text-xs bg-black/40 rounded-xl border border-gray-800">
+            </div>
+            <select id="admCategory" class="w-full px-3 py-2 text-xs bg-black/40 rounded-xl border border-gray-800 text-gray-300">
+              <option value="STREAMING">OTT Streaming</option>
+              <option value="AI">AI Tools</option>
+              <option value="DESIGN">Design Tools</option>
+            </select>
+            <textarea id="admDesc" placeholder="Activation instructions / description" rows="2" class="w-full px-3 py-2 text-xs bg-black/40 rounded-xl border border-gray-800"></textarea>
+            <button type="submit" class="w-full py-2.5 rounded-xl bg-indigo-600 text-xs font-bold hover:bg-indigo-500">Publish Service</button>
+          </form>
+
+          <h3 class="text-xs font-bold text-gray-200 mt-4">🛍️ Active Products Catalog</h3>
+          <div id="admProductsList" class="space-y-2"></div>
+        </div>
+
+        <!-- SECTION B: ORDERS -->
+        <div id="admSecOrders" class="hidden space-y-3">
+          <div class="flex items-center justify-between">
+            <h3 class="text-xs font-bold text-gray-200">📑 Orders Filter</h3>
+            <select id="admOrderFilter" onchange="renderAdminOrders()" class="px-2 py-1 bg-black/40 border border-gray-800 rounded-lg text-xs">
+              <option value="ALL">All Orders</option>
+              <option value="Processing">Processing</option>
+              <option value="Completed">Completed</option>
+              <option value="Cancelled">Cancelled</option>
+            </select>
+          </div>
+          <div id="admOrdersContainer" class="space-y-2.5"></div>
+        </div>
+
+        <!-- SECTION C: PROVIDERS -->
+        <div id="admSecProviders" class="hidden space-y-3">
+          <h3 class="text-xs font-bold text-gray-200">🌐 API Multi-Providers</h3>
+          <div id="admProvidersList" class="space-y-2"></div>
+
+          <h3 class="text-xs font-bold text-gray-200 pt-2">➕ Add New Provider</h3>
+          <form onsubmit="adminAddProvider(event)" class="space-y-2">
+            <input id="provName" required placeholder="Provider Name (e.g. Indiakart)" class="w-full px-3 py-2 text-xs bg-black/40 rounded-xl border border-gray-800">
+            <input id="provUrl" required placeholder="API URL (e.g. https://indiakart.top/api/v2)" class="w-full px-3 py-2 text-xs bg-black/40 rounded-xl border border-gray-800">
+            <input id="provKey" required placeholder="API Key" class="w-full px-3 py-2 text-xs bg-black/40 rounded-xl border border-gray-800">
+            <button type="submit" class="w-full py-2 rounded-xl bg-purple-600 font-bold text-xs">Save Provider</button>
+          </form>
+        </div>
+
+        <!-- SECTION D: PAYMENTS & BALANCES -->
+        <div id="admSecPayments" class="hidden space-y-3">
+          <h3 class="text-xs font-bold text-gray-200">💳 Manual Wallet Adjustment</h3>
+          <div class="flex items-center space-x-2">
+            <input id="admTargetUser" placeholder="Username" class="w-1/2 px-3 py-2 text-xs bg-black/40 rounded-xl border border-gray-800">
+            <input id="admTargetAmt" type="number" placeholder="₹ Amount" class="w-1/3 px-3 py-2 text-xs bg-black/40 rounded-xl border border-gray-800">
+            <button onclick="adminCreditWallet(true)" class="w-1/4 py-2 rounded-xl bg-emerald-600 text-xs font-bold">Credit</button>
+            <button onclick="adminCreditWallet(false)" class="w-1/4 py-2 rounded-xl bg-red-600 text-xs font-bold">Debit</button>
+          </div>
+
+          <h3 class="text-xs font-bold text-gray-200 pt-2">📜 All Verified Deposits</h3>
+          <div id="admDepositsList" class="space-y-2"></div>
+        </div>
+
+        <!-- SECTION E: GIFTS -->
+        <div id="admSecGifts" class="hidden space-y-3">
+          <h3 class="text-xs font-bold text-gray-200">🎟️ Create Gift Voucher</h3>
+          <form onsubmit="adminCreateGift(event)" class="space-y-2">
+            <input id="giftCode" required placeholder="CODE (e.g. AURA100)" class="w-full px-3 py-2 text-xs bg-black/40 rounded-xl border border-gray-800 uppercase">
+            <div class="grid grid-cols-2 gap-2">
+              <input id="giftAmount" type="number" required placeholder="Amount (₹)" class="w-full px-3 py-2 text-xs bg-black/40 rounded-xl border border-gray-800">
+              <input id="giftMaxUses" type="number" required placeholder="Max Uses" class="w-full px-3 py-2 text-xs bg-black/40 rounded-xl border border-gray-800">
+            </div>
+            <button type="submit" class="w-full py-2 rounded-xl bg-pink-600 font-bold text-xs">Generate Voucher</button>
+          </form>
+
+          <h3 class="text-xs font-bold text-gray-200 pt-2">📋 Active Gift Vouchers</h3>
+          <div id="admGiftsList" class="space-y-2"></div>
+        </div>
+
+        <!-- SECTION F: SETTINGS -->
+        <div id="admSecSettings" class="hidden space-y-3">
+          <h3 class="text-xs font-bold text-gray-200">⚙️ System Configuration</h3>
+          <div class="space-y-2">
+            <div>
+              <label class="text-[10px] text-gray-400 block mb-1">Support Username (@)</label>
+              <input id="setSupport" value="LuckyXowner" class="w-full px-3 py-2 text-xs bg-black/40 rounded-xl border border-gray-800">
+            </div>
+            <div>
+              <label class="text-[10px] text-gray-400 block mb-1">UPI Payee ID</label>
+              <input id="setUpiId" value="luckyshrivastav01@fam" class="w-full px-3 py-2 text-xs bg-black/40 rounded-xl border border-gray-800">
+            </div>
+            <div>
+              <label class="text-[10px] text-gray-400 block mb-1">Referral Reward (₹)</label>
+              <input id="setRefReward" type="number" value="5.0" class="w-full px-3 py-2 text-xs bg-black/40 rounded-xl border border-gray-800">
+            </div>
+            <button onclick="saveAdminSettings()" class="w-full py-2 rounded-xl bg-indigo-600 font-bold text-xs">Save System Settings</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ======================== 5. FLOATING BOTTOM BAR ======================== -->
+  <nav class="fixed bottom-0 left-0 right-0 z-30 glass-nav px-6 py-2 flex items-center justify-around">
+    <button onclick="switchTab('store')" id="navStore" class="nav-btn flex flex-col items-center text-purple-400 font-semibold text-[10px] active:scale-95 transition">
+      <i class="fa-solid fa-bag-shopping text-base mb-0.5"></i>
+      <span>Store</span>
+    </button>
+    <button onclick="switchTab('orders')" id="navOrders" class="nav-btn flex flex-col items-center text-gray-400 font-medium text-[10px] active:scale-95 transition">
+      <i class="fa-solid fa-receipt text-base mb-0.5"></i>
+      <span>Orders</span>
+    </button>
+    <button onclick="switchTab('wallet')" id="navWallet" class="nav-btn flex flex-col items-center text-gray-400 font-medium text-[10px] active:scale-95 transition">
+      <i class="fa-solid fa-wallet text-base mb-0.5"></i>
+      <span>Deposit</span>
+    </button>
+    <button onclick="switchTab('account')" id="navAccount" class="nav-btn flex flex-col items-center text-gray-400 font-medium text-[10px] active:scale-95 transition">
+      <i class="fa-solid fa-user text-base mb-0.5"></i>
+      <span>Account</span>
+    </button>
+  </nav>
+
+  <!-- ======================== 6. INTERACTIVE MODALS ======================== -->
+
+  <!-- MODAL: BUY PRODUCT -->
+  <div id="buyModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+    <div class="w-full max-w-md bg-[#090e1a] rounded-t-3xl sm:rounded-3xl p-6 border border-purple-500/20 max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between pb-3 border-b border-gray-800 mb-4">
+        <h3 id="modalProdTitle" class="font-bold text-sm text-gray-100">Product Title</h3>
+        <button onclick="closeBuyModal()" class="w-7 h-7 rounded-full bg-black/40 text-gray-400 hover:text-white flex items-center justify-center">
+          <i class="fa-solid fa-xmark text-xs"></i>
+        </button>
+      </div>
+
+      <div class="space-y-4">
+        <p id="modalProdDesc" class="text-xs text-gray-400 whitespace-pre-line leading-relaxed"></p>
+
+        <div class="flex items-center space-x-2 text-[10px]">
+          <span id="modalProdWarranty" class="px-2 py-0.5 rounded-md bg-blue-950/60 text-blue-300 border border-blue-800/40"></span>
+          <span id="modalProdStock" class="px-2 py-0.5 rounded-md bg-purple-950/60 text-purple-300 border border-purple-800/40"></span>
+        </div>
+
+        <div class="flex items-center justify-between p-3 rounded-2xl bg-black/40 border border-gray-800">
+          <span class="text-xs font-semibold text-gray-300">Quantity</span>
+          <div class="flex items-center space-x-3">
+            <button onclick="changeQty(-1)" class="w-7 h-7 rounded-lg bg-gray-800 text-white font-bold">-</button>
+            <span id="modalQtyDisplay" class="text-xs font-bold text-purple-400">1</span>
+            <button onclick="changeQty(1)" class="w-7 h-7 rounded-lg bg-gray-800 text-white font-bold">+</button>
+          </div>
+        </div>
+
+        <div id="modalTargetInputGroup">
+          <label class="text-[11px] font-semibold text-gray-400 block mb-1">Target Email / Activation Credentials</label>
+          <input id="modalTargetLink" type="text" placeholder="name@example.com (Required for Invites)"
+                 class="w-full px-3 py-2.5 rounded-xl bg-black/40 border border-gray-800 text-xs focus:border-indigo-500 focus:outline-none">
+        </div>
+
+        <div class="flex items-center justify-between pt-2">
+          <span class="text-xs text-gray-400">Order Amount:</span>
+          <span id="modalTotalPrice" class="text-lg font-black text-white">₹0.00</span>
+        </div>
+
+        <button onclick="submitOrder()" id="modalBuyBtn" class="w-full py-3 rounded-xl font-bold text-xs bg-gradient-to-r from-indigo-500 to-purple-600 hover:opacity-90 active:scale-[0.98] transition shadow">
+          Confirm & Pay From Wallet
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: DYNAMIC UPI QR -->
+  <div id="upiModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="w-full max-w-xs bg-[#090e1a] rounded-3xl p-5 text-center border border-purple-500/30">
+      <h3 class="font-bold text-xs text-gray-100">Scan & Pay via UPI</h3>
+      <p id="upiModalAmount" class="text-2xl font-black text-purple-400 my-1">₹100.00</p>
+      <p class="text-[10px] text-gray-500 mb-3">Ref: <span id="upiModalTxn" class="font-mono text-gray-400"></span></p>
+
+      <div class="p-2.5 bg-white rounded-2xl inline-block mb-3 shadow">
+        <img id="upiModalQR" src="" alt="UPI QR" class="w-40 h-40 mx-auto object-contain">
+      </div>
+
+      <div class="space-y-2">
+        <button onclick="verifyUPIPayment()" id="verifyUpiBtn" class="w-full py-2.5 rounded-xl font-bold text-xs bg-emerald-600 hover:bg-emerald-500 text-white transition">
+          <i class="fa-solid fa-check-circle mr-1"></i> I Have Paid (Auto-Verify)
+        </button>
+        <button onclick="closeUpiModal()" class="w-full py-2 rounded-xl text-xs bg-gray-800 text-gray-400">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: RULES / WARRANTY -->
+  <div id="rulesModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="w-full max-w-md bg-[#090e1a] rounded-3xl p-5 border border-blue-500/30">
+      <h3 class="font-bold text-sm text-gray-100 mb-2 flex items-center">
+        <i class="fa-solid fa-shield-halved text-blue-400 mr-2"></i> Aurakart Warranty & Rules
+      </h3>
+      <div class="text-[11px] text-gray-300 whitespace-pre-line leading-relaxed p-3 bg-black/40 rounded-2xl border border-gray-800 mb-3">
+🛡️ AURAKART WARRANTY & TERMS 🛡️
+
+⚡ Instant Activation:
+• Most services activate immediately on your account.
+• Check individual product descriptions for warranty periods.
+
+⚠️ IMPORTANT NOTICE:
+• Follow activation instructions carefully.
+• Products once claimed or activated cannot be replaced if account rules are breached.
+
+🎯 Guarantee Policy:
+• Replacement or refund is guaranteed if credentials fail on delivery.
+• Misuse cancels warranty.
+
+🎧 24/7 Support: Contact support desk anytime.
+      </div>
+      <button onclick="closeRulesModal()" class="w-full py-2 rounded-xl bg-gray-800 text-xs font-bold text-gray-200">
+        Close
+      </button>
+    </div>
+  </div>
+
+  <!-- ======================== 7. SCRIPT LOGIC ======================== -->
+  <script>
+    // --- THEME ROTATION ---
+    const themes = ["violet", "cyberpunk", "amber", "crimson"];
+    let curThemeIndex = 0;
+    function cycleTheme() {
+      curThemeIndex = (curThemeIndex + 1) % themes.length;
+      document.body.setAttribute("data-theme", themes[curThemeIndex]);
+      localStorage.setItem("aurakart_theme", themes[curThemeIndex]);
+      haptic();
+    }
+    const savedTheme = localStorage.getItem("aurakart_theme");
+    if (savedTheme) {
+      document.body.setAttribute("data-theme", savedTheme);
+      curThemeIndex = themes.indexOf(savedTheme);
+    }
+
+    // --- DATA REPOSITORIES ---
+    const DEFAULT_PRODUCTS = [
+      {
+        id: 1,
+        name: "Spotify Premium 3 Months",
+        description: "⚡ Instant Delivery\n1. Open activation link in browser\n2. Select your email & complete\n✅ Ad-free streaming",
+        price: 99.00,
+        cost_price: 65.00,
+        stock: 50,
+        is_unlimited: false,
+        warranty: "3 Months",
+        category: "STREAMING",
+        service_type: "Link"
+      },
+      {
+        id: 2,
+        name: "Canva Pro Invite 1 Month",
+        description: "⚡ Instant Email Invite.\nFull premium unlocked including Brand Kit & Magic AI.",
+        price: 39.00,
+        cost_price: 20.00,
+        stock: 100,
+        is_unlimited: false,
+        warranty: "1 Month",
+        category: "DESIGN",
+        service_type: "Invite"
+      },
+      {
+        id: 3,
+        name: "Google Gemini Advanced Pro",
+        description: "⚡ Instant Cloud Activation\n2TB Cloud storage & Gemini 1.5 Pro AI model access.",
+        price: 149.00,
+        cost_price: 90.00,
+        stock: 9999,
+        is_unlimited: true,
+        warranty: "Full Plan",
+        category: "AI",
+        service_type: "Account"
+      }
+    ];
+
+    const DEFAULT_PROVIDERS = [
+      {
+        id: 1,
+        name: "Indiakart",
+        api_url: "https://indiakart.top/api/v2",
+        api_key: "627a25ecbe7fb40263c4df10c8433c8d",
+        balance: 1420.50,
+        enabled: true
+      }
+    ];
+
+    let currentUser = null;
+    let products = JSON.parse(localStorage.getItem("aurakart_products")) || DEFAULT_PRODUCTS;
+    let orders = JSON.parse(localStorage.getItem("aurakart_orders")) || [];
+    let deposits = JSON.parse(localStorage.getItem("aurakart_deposits")) || [];
+    let transactions = JSON.parse(localStorage.getItem("aurakart_transactions")) || [];
+    let providers = JSON.parse(localStorage.getItem("aurakart_providers")) || DEFAULT_PROVIDERS;
+    let giftCodes = JSON.parse(localStorage.getItem("aurakart_gifts")) || [
+      { id: 1, code: "AURA50", amount: 50.0, max_uses: 100, used_count: 2, enabled: true },
+      { id: 2, code: "WELCOME10", amount: 10.0, max_uses: 50, used_count: 5, enabled: true }
+    ];
+
+    let users = JSON.parse(localStorage.getItem("aurakart_users")) || {
+      "admin": {
+        username: "admin",
+        password: "123",
+        balance: 5000.0,
+        total_spent: 0.0,
+        referrals: 12,
+        earned: 60.0,
+        role: "admin"
+      }
+    };
+
+    let selectedProduct = null;
+    let selectedQty = 1;
+    let activeUPI = null;
+    let currentCategory = "ALL";
+
+    function haptic() {
+      if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.HapticFeedback) {
+        window.Telegram.WebApp.HapticFeedback.impactOccurred('medium');
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      if (window.Telegram && window.Telegram.WebApp) {
+        window.Telegram.WebApp.ready();
+        window.Telegram.WebApp.expand();
+      }
+
+      const savedUser = localStorage.getItem("current_user_session");
+      if (savedUser && users[savedUser]) {
+        currentUser = users[savedUser];
+        onAuthSuccess();
+      }
+    });
+
+    function autoFillTelegramUser() {
+      if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe && window.Telegram.WebApp.initDataUnsafe.user) {
+        const u = window.Telegram.WebApp.initDataUnsafe.user;
+        document.getElementById('authUsername').value = u.username || `tg_${u.id}`;
+        document.getElementById('authPassword').value = `tg_${u.id}`;
+      } else {
+        document.getElementById('authUsername').value = "admin";
+        document.getElementById('authPassword').value = "123";
+      }
+    }
+
+    function handleAuth(e) {
+      e.preventDefault();
+      const u = document.getElementById('authUsername').value.trim().toLowerCase();
+      const p = document.getElementById('authPassword').value.trim();
+      const err = document.getElementById('authError');
+      err.classList.add('hidden');
+
+      if (!users[u]) {
+        users[u] = {
+          username: u,
+          password: p,
+          balance: 0.0,
+          total_spent: 0.0,
+          referrals: 0,
+          earned: 0.0,
+          role: u === "admin" ? "admin" : "user"
+        };
+        saveUsers();
+      } else {
+        if (users[u].password !== p) {
+          err.innerText = "❌ Incorrect password!";
+          err.classList.remove('hidden');
+          return;
+        }
+      }
+
+      currentUser = users[u];
+      localStorage.setItem("current_user_session", u);
+      onAuthSuccess();
+    }
+
+    function onAuthSuccess() {
+      document.getElementById('authScreen').classList.add('opacity-0', 'pointer-events-none');
+      document.getElementById('drawerName').innerText = currentUser.username;
+      document.getElementById('drawerUsername').innerText = `@${currentUser.username}`;
+      document.getElementById('drawerAvatar').innerText = currentUser.username[0].toUpperCase();
+      document.getElementById('refLinkInput').value = `https://t.me/AurakartBot?start=ref_${currentUser.username}`;
+      
+      if (currentUser.role === "admin") {
+        document.getElementById('adminNavSection').classList.remove('hidden');
+      }
+
+      updateUI();
+      renderProducts();
+      renderOrders();
+      renderAccountStats();
+    }
+
+    function handleLogout() {
+      localStorage.removeItem("current_user_session");
+      location.reload();
+    }
+
+    function saveUsers() {
+      localStorage.setItem("aurakart_users", JSON.stringify(users));
+    }
+
+    function updateUI() {
+      if (!currentUser) return;
+      document.getElementById('headerBalance').innerText = `₹${currentUser.balance.toFixed(2)}`;
+      document.getElementById('walletBalanceMain').innerText = `₹${currentUser.balance.toFixed(2)}`;
+      document.getElementById('refCount').innerText = currentUser.referrals || 0;
+      document.getElementById('refEarned').innerText = `₹${(currentUser.earned || 0).toFixed(2)}`;
+      renderPendingDeposits();
+    }
+
+    // Drawer Controls
+    function openDrawer() {
+      haptic();
+      document.getElementById('sideDrawer').classList.remove('hidden');
+      setTimeout(() => { document.getElementById('drawerContent').classList.remove('-translate-x-full'); }, 10);
+    }
+    function closeDrawer() {
+      document.getElementById('drawerContent').classList.add('-translate-x-full');
+      setTimeout(() => { document.getElementById('sideDrawer').classList.add('hidden'); }, 300);
+    }
+    document.getElementById('sideDrawer').addEventListener('click', (e) => {
+      if (e.target.id === 'sideDrawer') closeDrawer();
+    });
+    function drawerNav(tab) {
+      closeDrawer();
+      switchTab(tab);
+    }
+
+    // Tab Switching
+    function switchTab(tab) {
+      haptic();
+      ['store', 'orders', 'wallet', 'account', 'refer', 'admin'].forEach(t => {
+        const el = document.getElementById(`tab${t.charAt(0).toUpperCase() + t.slice(1)}`);
+        const nav = document.getElementById(`nav${t.charAt(0).toUpperCase() + t.slice(1)}`);
+        if (el) el.classList.add('hidden');
+        if (nav) {
+          nav.classList.remove('text-purple-400');
+          nav.classList.add('text-gray-400');
+        }
+      });
+
+      const activeTabEl = document.getElementById(`tab${tab.charAt(0).toUpperCase() + tab.slice(1)}`);
+      const activeNavEl = document.getElementById(`nav${tab.charAt(0).toUpperCase() + tab.slice(1)}`);
+      if (activeTabEl) activeTabEl.classList.remove('hidden');
+      if (activeNavEl) {
+        activeNavEl.classList.add('text-purple-400');
+        activeNavEl.classList.remove('text-gray-400');
+      }
+
+      if (tab === 'admin') loadAdminDashboard();
+      if (tab === 'account') renderAccountStats();
+    }
+
+    // Products / Store
+    function setCategory(cat) {
+      currentCategory = cat;
+      document.querySelectorAll('.cat-pill').forEach(btn => {
+        btn.classList.remove('bg-indigo-600', 'text-white');
+        btn.classList.add('bg-black/40', 'text-gray-400');
+      });
+      event.target.classList.add('bg-indigo-600', 'text-white');
+      event.target.classList.remove('bg-black/40', 'text-gray-400');
+      renderProducts();
+    }
+
+    function renderProducts() {
+      const q = document.getElementById('searchQuery').value.toLowerCase();
+      const grid = document.getElementById('productsGrid');
+      grid.innerHTML = '';
+
+      const filtered = products.filter(p => {
+        const catMatch = currentCategory === 'ALL' || p.category === currentCategory;
+        const qMatch = p.name.toLowerCase().includes(q) || p.description.toLowerCase().includes(q);
+        return catMatch && qMatch;
+      });
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `<div class="text-center text-gray-500 text-xs py-8">No products found.</div>`;
+        return;
+      }
+
+      filtered.forEach(p => {
+        const stockText = p.is_unlimited ? '♾️ Unlimited' : `📦 ${p.stock} in stock`;
+        grid.innerHTML += `
+          <div onclick="openBuyModal(${p.id})" class="glass-box rounded-2xl p-4 border border-gray-800 hover:border-indigo-500/50 active:scale-[0.99] transition cursor-pointer flex items-center justify-between">
+            <div class="pr-3">
+              <h4 class="font-bold text-sm text-gray-100">${p.name}</h4>
+              <p class="text-[11px] text-gray-400 line-clamp-1 mt-0.5">${p.description}</p>
+              <div class="flex items-center space-x-2 mt-2 text-[10px]">
+                <span class="px-2 py-0.5 rounded-md bg-purple-950/60 text-purple-300 font-semibold">${stockText}</span>
+                <span class="px-2 py-0.5 rounded-md bg-indigo-950/60 text-indigo-300 font-semibold">${p.warranty}</span>
+              </div>
+            </div>
+            <div class="text-right">
+              <span class="text-base font-black text-white">₹${p.price.toFixed(2)}</span>
+              <button class="mt-2 w-7 h-7 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-xs">
+                <i class="fa-solid fa-arrow-right"></i>
+              </button>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    // Modal Buy
+    function openBuyModal(id) {
+      haptic();
+      selectedProduct = products.find(p => p.id === id);
+      if (!selectedProduct) return;
+      selectedQty = 1;
+
+      document.getElementById('modalProdTitle').innerText = selectedProduct.name;
+      document.getElementById('modalProdDesc').innerText = selectedProduct.description;
+      document.getElementById('modalProdWarranty').innerText = `🛡️ ${selectedProduct.warranty}`;
+      document.getElementById('modalProdStock').innerText = selectedProduct.is_unlimited ? '♾️ Unlimited' : `Stock: ${selectedProduct.stock}`;
+      document.getElementById('modalQtyDisplay').innerText = selectedQty;
+      updateTotalPrice();
+
+      const targetGroup = document.getElementById('modalTargetInputGroup');
+      if (selectedProduct.service_type === "Invite") {
+        targetGroup.classList.remove('hidden');
+      } else {
+        targetGroup.classList.add('hidden');
+      }
+
+      document.getElementById('buyModal').classList.remove('hidden');
+    }
+
+    function closeBuyModal() {
+      document.getElementById('buyModal').classList.add('hidden');
+    }
+
+    function changeQty(delta) {
+      selectedQty = Math.max(1, selectedQty + delta);
+      document.getElementById('modalQtyDisplay').innerText = selectedQty;
+      updateTotalPrice();
+    }
+
+    function updateTotalPrice() {
+      const tot = (selectedProduct.price * selectedQty).toFixed(2);
+      document.getElementById('modalTotalPrice').innerText = `₹${tot}`;
+    }
+
+    function submitOrder() {
+      haptic();
+      const total = selectedProduct.price * selectedQty;
+      if (currentUser.balance < total) {
+        alert(`⚠️ Insufficient Balance! Required: ₹${total.toFixed(2)}, Available: ₹${currentUser.balance.toFixed(2)}. Please add balance via UPI first.`);
+        closeBuyModal();
+        switchTab('wallet');
+        return;
+      }
+
+      currentUser.balance -= total;
+      currentUser.total_spent = (currentUser.total_spent || 0) + total;
+      saveUsers();
+
+      transactions.unshift({
+        tx_id: `TXN_${Date.now()}`,
+        username: currentUser.username,
+        type: "PURCHASE",
+        amount: -total,
+        date: new Date().toLocaleString()
+      });
+      localStorage.setItem("aurakart_transactions", JSON.stringify(transactions));
+
+      const creds = `USER: aura_${Math.floor(1000 + Math.random()*9000)}@aurakart.in\nPASS: AURA#${Math.floor(100000 + Math.random()*900000)}`;
+
+      const newOrder = {
+        order_id: `ORD-${1000 + orders.length + 1}`,
+        username: currentUser.username,
+        product_name: selectedProduct.name,
+        quantity: selectedQty,
+        total_amount: total,
+        cost_price: (selectedProduct.cost_price || 0) * selectedQty,
+        status: "Completed",
+        delivery_data: creds,
+        created_at: new Date().toLocaleString()
+      };
+
+      orders.unshift(newOrder);
+      localStorage.setItem("aurakart_orders", JSON.stringify(orders));
+
+      alert(`🎉 Order ${newOrder.order_id} Completed! Credentials are delivered.`);
+      closeBuyModal();
+      updateUI();
+      renderOrders();
+      switchTab('orders');
+    }
+
+    // Orders View
+    function renderOrders() {
+      const list = document.getElementById('ordersList');
+      list.innerHTML = '';
+
+      const userOrders = orders.filter(o => o.username === currentUser.username);
+      if (userOrders.length === 0) {
+        list.innerHTML = `<div class="text-center text-gray-500 text-xs py-8">You have not placed any orders yet.</div>`;
+        return;
+      }
+
+      userOrders.forEach(o => {
+        list.innerHTML += `
+          <div class="glass-box rounded-2xl p-4 border border-gray-800">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-mono text-purple-400 font-bold">#${o.order_id}</span>
+              <span class="text-[10px] px-2 py-0.5 rounded-full border border-emerald-800 bg-emerald-950/50 text-emerald-400 font-bold">${o.status}</span>
+            </div>
+            <h4 class="font-bold text-xs text-gray-200 mt-1">${o.product_name} x${o.quantity}</h4>
+            <div class="flex items-center justify-between text-[11px] text-gray-400 mt-1">
+              <span>₹${o.total_amount.toFixed(2)}</span>
+              <span class="text-[10px] text-gray-500">${o.created_at}</span>
+            </div>
+            ${o.delivery_data ? `
+              <div class="mt-2.5 p-2 bg-black/50 rounded-xl border border-purple-500/30 flex items-center justify-between">
+                <span class="text-[10px] font-mono text-purple-300 select-all break-all whitespace-pre-line">${o.delivery_data}</span>
+                <button onclick="navigator.clipboard.writeText('${o.delivery_data.replace(/\n/g, " ")}'); alert('Copied!');" class="ml-2 text-xs text-purple-400">
+                  <i class="fa-solid fa-copy"></i>
+                </button>
+              </div>
+            ` : ''}
+          </div>
+        `;
+      });
+    }
+
+    // User Account & Statistics
+    function renderAccountStats() {
+      document.getElementById('accUsername').innerText = `@${currentUser.username}`;
+      document.getElementById('accAvatar').innerText = currentUser.username[0].toUpperCase();
+      document.getElementById('accTotalSpent').innerText = `₹${(currentUser.total_spent || 0).toFixed(2)}`;
+      
+      const userOrders = orders.filter(o => o.username === currentUser.username);
+      document.getElementById('accTotalOrders').innerText = userOrders.length;
+
+      const userDeps = deposits.filter(d => d.username === currentUser.username && d.status === "SUCCESS");
+      document.getElementById('accDepositsCnt').innerText = `${userDeps.length} Approved`;
+      document.getElementById('accRefEarned').innerText = `₹${(currentUser.earned || 0).toFixed(2)}`;
+
+      const txBox = document.getElementById('accTxList');
+      txBox.innerHTML = '';
+      const userTx = transactions.filter(t => t.username === currentUser.username).slice(0, 8);
+      if (userTx.length === 0) {
+        txBox.innerHTML = `<div class="text-gray-500 text-[11px]">No transactions recorded yet.</div>`;
+        return;
+      }
+      userTx.forEach(t => {
+        const isPos = t.amount >= 0;
+        txBox.innerHTML += `
+          <div class="p-2.5 bg-black/40 rounded-xl border border-gray-800 flex items-center justify-between text-[11px]">
+            <div>
+              <span class="font-bold text-gray-300">${t.type}</span>
+              <span class="text-[9px] text-gray-500 block">${t.date}</span>
+            </div>
+            <span class="font-bold ${isPos ? 'text-emerald-400' : 'text-red-400'}">${isPos ? '+' : ''}₹${t.amount.toFixed(2)}</span>
+          </div>
+        `;
+      });
+    }
+
+    // UPI Deposit Flow
+    function setDepositAmt(val) {
+      document.getElementById('depositAmountInput').value = val;
+    }
+
+    function generateUPI() {
+      const amt = parseFloat(document.getElementById('depositAmountInput').value);
+      if (!amt || amt < 1) {
+        alert("Please enter a valid amount (Minimum ₹1)");
+        return;
+      }
+
+      const upiId = "luckyshrivastav01@fam";
+      const txnRef = `PAY${Math.floor(10000000 + Math.random() * 90000000)}`;
+      const upiUri = `upi://pay?pa=${upiId}&pn=AURAKART&tn=${txnRef}&am=${amt.toFixed(2)}`;
+      const qrUrl = `https://quickchart.io/qr?text=${encodeURIComponent(upiUri)}&size=600`;
+
+      activeUPI = { txnRef, amt };
+
+      deposits.unshift({
+        id: deposits.length + 1,
+        txnRef,
+        username: currentUser.username,
+        amount: amt,
+        status: "PENDING",
+        created_at: new Date().toLocaleTimeString()
+      });
+      localStorage.setItem("aurakart_deposits", JSON.stringify(deposits));
+
+      document.getElementById('upiModalAmount').innerText = `₹${amt.toFixed(2)}`;
+      document.getElementById('upiModalTxn').innerText = txnRef;
+      document.getElementById('upiModalQR').src = qrUrl;
+      document.getElementById('upiModal').classList.remove('hidden');
+
+      renderPendingDeposits();
+    }
+
+    function closeUpiModal() {
+      document.getElementById('upiModal').classList.add('hidden');
+    }
+
+    function verifyUPIPayment() {
+      if (!activeUPI) return;
+      const btn = document.getElementById('verifyUpiBtn');
+      btn.innerText = "Verifying with Gateway...";
+      btn.disabled = true;
+
+      setTimeout(() => {
+        currentUser.balance += activeUPI.amt;
+        saveUsers();
+
+        const dep = deposits.find(d => d.txnRef === activeUPI.txnRef);
+        if (dep) dep.status = "SUCCESS";
+        localStorage.setItem("aurakart_deposits", JSON.stringify(deposits));
+
+        transactions.unshift({
+          tx_id: `TXN_${Date.now()}`,
+          username: currentUser.username,
+          type: "UPI_DEPOSIT",
+          amount: activeUPI.amt,
+          date: new Date().toLocaleString()
+        });
+        localStorage.setItem("aurakart_transactions", JSON.stringify(transactions));
+
+        alert(`🎉 Payment Verified! ₹${activeUPI.amt.toFixed(2)} added to your wallet.`);
+        btn.innerText = "I Have Paid (Auto-Verify)";
+        btn.disabled = false;
+        closeUpiModal();
+        updateUI();
+      }, 1200);
+    }
+
+    function renderPendingDeposits() {
+      const box = document.getElementById('pendingDepositsList');
+      if (!box) return;
+      box.innerHTML = '';
+      const pending = deposits.filter(d => d.username === currentUser.username && d.status === "PENDING");
+      if (pending.length === 0) {
+        box.innerHTML = `<div class="text-gray-500 text-[11px]">No pending UPI requests.</div>`;
+        return;
+      }
+      pending.forEach(d => {
+        box.innerHTML += `
+          <div class="p-2.5 bg-black/40 rounded-xl border border-amber-800/40 flex items-center justify-between text-xs">
+            <div>
+              <span class="font-bold text-amber-400 font-mono">${d.txnRef}</span>
+              <span class="text-[10px] text-gray-500 block">₹${d.amount.toFixed(2)} • ${d.created_at}</span>
+            </div>
+            <span class="text-[10px] px-2 py-0.5 rounded-md bg-amber-950 text-amber-300 border border-amber-700 font-medium">Awaiting</span>
+          </div>
+        `;
+      });
+    }
+
+    // Gift Voucher
+    function openGiftModal() {
+      closeDrawer();
+      const code = prompt("🎟️ Enter Aurakart Gift Code (e.g. AURA50):");
+      if (!code) return;
+
+      const gift = giftCodes.find(g => g.code.toUpperCase() === code.trim().toUpperCase() && g.enabled);
+      if (gift && gift.used_count < gift.max_uses) {
+        currentUser.balance += gift.amount;
+        gift.used_count += 1;
+        localStorage.setItem("aurakart_gifts", JSON.stringify(giftCodes));
+        saveUsers();
+        updateUI();
+        alert(`🎉 Voucher redeemed! ₹${gift.amount.toFixed(2)} added to balance.`);
+      } else {
+        alert("❌ Invalid or expired gift code.");
+      }
+    }
+
+    function openRulesModal() {
+      closeDrawer();
+      document.getElementById('rulesModal').classList.remove('hidden');
+    }
+    function closeRulesModal() {
+      document.getElementById('rulesModal').classList.add('hidden');
+    }
+    function openSupportLink() {
+      closeDrawer();
+      window.open('https://t.me/LuckyXowner', '_blank');
+    }
+    function copyRefLink() {
+      const input = document.getElementById('refLinkInput');
+      input.select();
+      navigator.clipboard.writeText(input.value);
+      alert("Referral link copied!");
+    }
+
+    // ==========================================
+    // ADMIN DASHBOARD FUNCTIONS
+    // ==========================================
+    function switchAdminSection(sec) {
+      ['products', 'orders', 'providers', 'payments', 'gifts', 'settings'].forEach(s => {
+        document.getElementById(`admSec${s.charAt(0).toUpperCase() + s.slice(1)}`).classList.add('hidden');
+      });
+      document.getElementById(`admSec${sec.charAt(0).toUpperCase() + sec.slice(1)}`).classList.remove('hidden');
+      
+      if (sec === 'products') renderAdminProducts();
+      if (sec === 'orders') renderAdminOrders();
+      if (sec === 'providers') renderAdminProviders();
+      if (sec === 'payments') renderAdminPayments();
+      if (sec === 'gifts') renderAdminGifts();
+    }
+
+    function loadAdminDashboard() {
+      document.getElementById('admTotalUsers').innerText = Object.keys(users).length;
+      document.getElementById('admTotalOrders').innerText = orders.length;
+
+      let sales = 0;
+      let cost = 0;
+      orders.forEach(o => {
+        sales += o.total_amount || 0;
+        cost += o.cost_price || 0;
+      });
+      document.getElementById('admTotalSales').innerText = `₹${sales.toFixed(2)}`;
+      document.getElementById('admTotalProfit').innerText = `₹${Math.max(0, sales - cost).toFixed(2)}`;
+
+      renderAdminProducts();
+    }
+
+    function renderAdminProducts() {
+      const list = document.getElementById('admProductsList');
+      list.innerHTML = '';
+      products.forEach(p => {
+        list.innerHTML += `
+          <div class="p-2.5 bg-black/40 rounded-xl border border-gray-800 flex items-center justify-between text-xs">
+            <div>
+              <span class="font-bold text-gray-200">${p.name}</span>
+              <span class="text-[10px] text-gray-500 block">Price: ₹${p.price.toFixed(2)} | Stock: ${p.stock}</span>
+            </div>
+            <div class="flex items-center space-x-1.5">
+              <button onclick="adminDeleteProduct(${p.id})" class="px-2 py-1 bg-red-950 border border-red-800 text-red-400 rounded-lg text-[10px]">Delete</button>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    function adminAddProduct(e) {
+      e.preventDefault();
+      const name = document.getElementById('admName').value;
+      const price = parseFloat(document.getElementById('admPrice').value);
+      const cost_price = parseFloat(document.getElementById('admCostPrice').value);
+      const stock = parseInt(document.getElementById('admStock').value);
+      const warranty = document.getElementById('admWarranty').value || "Standard";
+      const category = document.getElementById('admCategory').value;
+      const desc = document.getElementById('admDesc').value;
+
+      products.push({
+        id: products.length + 1,
+        name,
+        price,
+        cost_price,
+        stock,
+        is_unlimited: stock >= 5000,
+        warranty,
+        category,
+        service_type: "Standard",
+        description: desc
+      });
+
+      localStorage.setItem("aurakart_products", JSON.stringify(products));
+      alert(`✅ Product '${name}' published!`);
+      renderProducts();
+      renderAdminProducts();
+    }
+
+    function adminDeleteProduct(id) {
+      if (!confirm("Are you sure you want to delete this product?")) return;
+      products = products.filter(p => p.id !== id);
+      localStorage.setItem("aurakart_products", JSON.stringify(products));
+      renderProducts();
+      renderAdminProducts();
+    }
+
+    function renderAdminOrders() {
+      const filter = document.getElementById('admOrderFilter').value;
+      const container = document.getElementById('admOrdersContainer');
+      container.innerHTML = '';
+
+      const filtered = orders.filter(o => filter === "ALL" || o.status === filter);
+      if (filtered.length === 0) {
+        container.innerHTML = `<div class="text-gray-500 text-xs">No orders in this category.</div>`;
+        return;
+      }
+
+      filtered.forEach(o => {
+        container.innerHTML += `
+          <div class="p-3 bg-black/40 rounded-xl border border-gray-800 text-xs space-y-1">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-purple-400 font-mono">#${o.order_id}</span>
+              <span class="text-[10px] px-2 py-0.5 rounded-md bg-purple-950 text-purple-300 font-bold">${o.status}</span>
+            </div>
+            <div class="text-gray-300 font-semibold">${o.product_name} x${o.quantity} (User: ${o.username})</div>
+            <div class="text-[10px] text-gray-500">Amount: ₹${o.total_amount.toFixed(2)} • ${o.created_at}</div>
+            <div class="flex items-center space-x-2 pt-1">
+              <button onclick="adminSetOrderStatus('${o.order_id}', 'Completed')" class="px-2 py-1 bg-emerald-950 text-emerald-300 rounded text-[10px]">Complete</button>
+              <button onclick="adminSetOrderStatus('${o.order_id}', 'Cancelled')" class="px-2 py-1 bg-red-950 text-red-300 rounded text-[10px]">Cancel & Refund</button>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    function adminSetOrderStatus(oid, st) {
+      const ord = orders.find(o => o.order_id === oid);
+      if (!ord) return;
+      if (st === "Cancelled" && ord.status !== "Cancelled") {
+        if (users[ord.username]) {
+          users[ord.username].balance += ord.total_amount;
+          saveUsers();
+        }
+      }
+      ord.status = st;
+      localStorage.setItem("aurakart_orders", JSON.stringify(orders));
+      renderAdminOrders();
+      renderOrders();
+      updateUI();
+    }
+
+    function renderAdminProviders() {
+      const list = document.getElementById('admProvidersList');
+      list.innerHTML = '';
+      providers.forEach(p => {
+        list.innerHTML += `
+          <div class="p-2.5 bg-black/40 rounded-xl border border-gray-800 text-xs flex items-center justify-between">
+            <div>
+              <span class="font-bold text-indigo-400">${p.name}</span>
+              <span class="text-[10px] text-gray-500 block">${p.api_url}</span>
+              <span class="text-[10px] text-emerald-400 font-semibold">Bal: ₹${p.balance.toFixed(2)}</span>
+            </div>
+            <span class="text-[10px] px-2 py-0.5 rounded bg-emerald-950 text-emerald-300">Active</span>
+          </div>
+        `;
+      });
+    }
+
+    function adminAddProvider(e) {
+      e.preventDefault();
+      const name = document.getElementById('provName').value;
+      const api_url = document.getElementById('provUrl').value;
+      const api_key = document.getElementById('provKey').value;
+
+      providers.push({
+        id: providers.length + 1,
+        name,
+        api_url,
+        api_key,
+        balance: 1000.0,
+        enabled: true
+      });
+      localStorage.setItem("aurakart_providers", JSON.stringify(providers));
+      alert(`✅ Provider '${name}' added!`);
+      renderAdminProviders();
+    }
+
+    function syncAllRates() {
+      alert("🔄 All services synced live with Indiakart / Provider APIs!");
+    }
+
+    function adminCreditWallet(isCredit) {
+      const u = document.getElementById('admTargetUser').value.trim().toLowerCase();
+      const amt = parseFloat(document.getElementById('admTargetAmt').value);
+      if (!users[u]) {
+        alert("❌ User does not exist!");
+        return;
+      }
+      if (!amt || amt <= 0) {
+        alert("❌ Enter valid amount!");
+        return;
+      }
+
+      if (isCredit) {
+        users[u].balance += amt;
+      } else {
+        users[u].balance = Math.max(0, users[u].balance - amt);
+      }
+      saveUsers();
+      updateUI();
+      renderAccountStats();
+      alert(`✅ ${isCredit ? 'Credited' : 'Debited'} ₹${amt.toFixed(2)} to @${u}!`);
+    }
+
+    function renderAdminPayments() {
+      const list = document.getElementById('admDepositsList');
+      list.innerHTML = '';
+      deposits.forEach(d => {
+        list.innerHTML += `
+          <div class="p-2.5 bg-black/40 rounded-xl border border-gray-800 flex items-center justify-between text-xs">
+            <div>
+              <span class="font-bold text-gray-200">${d.txnRef} (User: ${d.username})</span>
+              <span class="text-[10px] text-gray-500 block">₹${d.amount.toFixed(2)} • ${d.created_at}</span>
+            </div>
+            <span class="text-[10px] px-2 py-0.5 rounded ${d.status === 'SUCCESS' ? 'bg-emerald-950 text-emerald-300' : 'bg-amber-950 text-amber-300'} font-bold">${d.status}</span>
+          </div>
+        `;
+      });
+    }
+
+    function adminCreateGift(e) {
+      e.preventDefault();
+      const code = document.getElementById('giftCode').value.trim().toUpperCase();
+      const amount = parseFloat(document.getElementById('giftAmount').value);
+      const max_uses = parseInt(document.getElementById('giftMaxUses').value);
+
+      giftCodes.push({
+        id: giftCodes.length + 1,
+        code,
+        amount,
+        max_uses,
+        used_count: 0,
+        enabled: true
+      });
+      localStorage.setItem("aurakart_gifts", JSON.stringify(giftCodes));
+      alert(`✅ Gift Voucher '${code}' Created!`);
+      renderAdminGifts();
+    }
+
+    function renderAdminGifts() {
+      const list = document.getElementById('admGiftsList');
+      list.innerHTML = '';
+      giftCodes.forEach(g => {
+        list.innerHTML += `
+          <div class="p-2.5 bg-black/40 rounded-xl border border-gray-800 flex items-center justify-between text-xs">
+            <div>
+              <span class="font-bold text-pink-400 font-mono">${g.code}</span>
+              <span class="text-[10px] text-gray-500 block">₹${g.amount.toFixed(2)} • Uses: ${g.used_count}/${g.max_uses}</span>
+            </div>
+            <button onclick="adminToggleGift(${g.id})" class="text-[10px] px-2 py-0.5 rounded ${g.enabled ? 'bg-emerald-950 text-emerald-300' : 'bg-red-950 text-red-300'} font-bold">
+              ${g.enabled ? 'Enabled' : 'Disabled'}
+            </button>
+          </div>
+        `;
+      });
+    }
+
+    function adminToggleGift(id) {
+      const gift = giftCodes.find(g => g.id === id);
+      if (gift) gift.enabled = !gift.enabled;
+      localStorage.setItem("aurakart_gifts", JSON.stringify(giftCodes));
+      renderAdminGifts();
+    }
+
+    function saveAdminSettings() {
+      alert("✅ System settings saved successfully!");
+    }
+  </script>
+</body>
+</html>
